@@ -3,11 +3,11 @@ import { Form, useFormikContext } from 'formik';
 
 
 type Props = {
-    render: (props: OutputProps) => React.ReactNode;
+    render: (formikProps: OutputProps) => React.ReactNode;
 }
 
 type OutputProps = {
-    formikBag: any,
+    [key: string]: any;
 }
 
 export const FormikForm = React.forwardRef(({ render, ...rest }: Props, formRef: React.RefObject<HTMLFormElement>) => {
@@ -15,9 +15,7 @@ export const FormikForm = React.forwardRef(({ render, ...rest }: Props, formRef:
 
     return (
         <Form ref={formRef} {...rest}>
-            {render({
-                formikBag: useFormikContext()
-            })}
+            {render(useFormikContext())}
         </Form>
     )
 })

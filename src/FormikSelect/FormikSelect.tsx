@@ -4,22 +4,22 @@ import { useFormikContext } from 'formik';
 
 type Props = {
     name: string;
-    render: (props: OutputProps) => React.ReactNode;
     options: Option[];
+
+    render: (props: OutputProps) => React.ReactNode;
 }
 
 type OutputProps = {
     name: string;
     value: any;
     error: string,
-    valid: boolean,
+    isValid: boolean,
     isInvalid: boolean,
-    selectedOption: Option,
+    selectedOption: Option | null,
     options: Option[],
-    formikBag: any,
+
     onBlur: (e: React.SyntheticEvent) => void;
     onChange: (value: any) => void,
-    [key: string]: any;
 }
 
 type Option = {
@@ -38,11 +38,14 @@ export const FormikSelect = ({ name, render, options }: Props) => {
         values,
         errors,
     }: any = useFormikContext();
-    const selectedOption = options.find(option => option.value === values[name]) || {
-        label: null,
-        value: null
-    };
-    const restOptions = options.filter(option => option.value !== selectedOption.value);
+
+    const selectedOption = React.useMemo(() => {
+        return options.find((option: Option) => option.value === values[name]) || null;
+    }, [options, values]);
+
+    const restOptions = React.useMemo(() => {
+        return options.filter((option: Option) => selectedOption ? option.value !== selectedOption.value : null);
+    }, [selectedOption])
 
     const handleChange = React.useCallback((value: any) => {
         setFieldValue(name, value);
@@ -54,11 +57,10 @@ export const FormikSelect = ({ name, render, options }: Props) => {
                 render({
                     ...getFieldProps(name),
                     error: errors[name],
-                    valid: !errors[name] && !!values[name],
+                    isValid: !errors[name] && !!values[name],
                     isInvalid: !!errors[name],
                     selectedOption,
                     options: restOptions,
-                    formikBag: useFormikContext(),
                     onChange: handleChange,
                 })
             }
