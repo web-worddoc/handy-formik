@@ -19,6 +19,7 @@ type OutputProps = {
     value: any;
     filesState: CustomFile[];
     error: string,
+    touched: boolean;
     isValid: boolean,
     isInvalid: boolean,
 
@@ -41,7 +42,13 @@ export const FormikFile = ({ render, name, maxFiles, multiple, maxSize, accept, 
 
     const myRef: React.RefObject<any> | null = React.useRef(null);
     const [ filesState, setFilesState ]: any = React.useState([]);
-    const { values, errors, setFieldValue, getFieldProps }: any = useFormikContext();
+    const {
+        values,
+        errors,
+        touched,
+        setFieldValue,
+        getFieldProps
+    }: any = useFormikContext();
 
     const handleUpload = React.useCallback((dropped: File[]) => {
         const newAmount = dropped.length;
@@ -108,6 +115,9 @@ export const FormikFile = ({ render, name, maxFiles, multiple, maxSize, accept, 
         }
     }, []);
 
+    const isValid = touched[name] && !errors[name] && (Array.isArray(values[name] ? !!values[name].length : !!values[name]));
+    const isInvalid = touched[name] && !!errors[name];
+
     return (
         <Dropzone
             ref={myRef}
@@ -131,8 +141,9 @@ export const FormikFile = ({ render, name, maxFiles, multiple, maxSize, accept, 
                                 ...extendedProps,
                                 filesState,
                                 error: errors[name],
-                                isValid: !errors[name] && !!values[name],
-                                isInvalid: !!errors[name],
+                                touched: !!touched[name],
+                                isValid,
+                                isInvalid,
                                 onClick: handleClick,
                                 onDelete: handleDelete,
                             })
