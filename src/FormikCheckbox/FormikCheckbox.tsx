@@ -43,7 +43,7 @@ export const FormikCheckbox = ({ name, render }: Props) => {
     }, [name]);
 
     const value = typeof values[name] !== 'boolean' ? false : values[name];
-    const isValid = touched[name] && !errors[name] && (typeof values[name] === 'number' ? isFinite(values[name]) : !!values[name]);
+    const isValid = touched[name] && !errors[name] && typeof value === 'boolean';
     const isInvalid = touched[name] && !!errors[name];
 
     return (
