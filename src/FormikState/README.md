@@ -4,11 +4,11 @@ FormikSate helps to descent Formik state for any use. It might be usefull if you
 
 ## Props
 
-`render: (props: OutputProps) => ReactNode`
+* `render: (props: OutputProps) => ReactNode`
 
 ## OutputProps
 
-`FormikProps<FormikBag>`
+* `FormikProps<FormikBag>`
 
 ## Usage
 

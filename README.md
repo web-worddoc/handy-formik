@@ -1,6 +1,6 @@
 # handy-formik
 
-handy-formik simplifies interaction with [Formik](https://github.com/jaredpalmer/formik) providing a set of ready-to-use components to be connected to your form elements.
+handy-formik simplifies interaction with [Formik](https://github.com/jaredpalmer/formik) providing a set of ready-to-use components. These components are used to connect all basic form elements to Formik.
 
 ## Getting Started
 

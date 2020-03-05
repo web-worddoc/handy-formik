@@ -4,25 +4,25 @@ FormikFile helps to connect a file uploader to Formik state.
 
 ## Props
 
-`render: (props: OutputProps) => ReactNode`
-`name: string`
-`maxFiles?: number`
-`maxSize?: number`
-`multiple?: boolean`
-`format?: Format`
-[accept?: string](https://react-dropzone.js.org/)
+* `render: (props: OutputProps) => ReactNode`
+* `name: string`
+* `maxFiles?: number`
+* `maxSize?: number`
+* `multiple?: boolean`
+* `format?: Format`
+* [accept?: string](https://react-dropzone.js.org/)
 
 ## OutputProps
 
-`name: string`
-`value: any`
-`filesState: CustomFile[]`
-`error: string`
-`isValid: boolean`
-`isInvalid: boolean`
-`onClick: () => void`
-`onDelete: (targetIndex: number) => void`
-`onBlur: (e: React.SyntheticEvent) => void`
+* `name: string`
+* `value: any`
+* `filesState: CustomFile[]`
+* `error: string`
+* `isValid: boolean`
+* `isInvalid: boolean`
+* `onClick: () => void`
+* `onDelete: (targetIndex: number) => void`
+* `onBlur: (e: React.SyntheticEvent) => void`
 
 ### Used types
 
