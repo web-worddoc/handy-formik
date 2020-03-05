@@ -13,6 +13,7 @@ FormikRadio helps to connect `<input type="radio"/>` to Formik state.
 * `name: string`
 * `value: any`
 * `error: any`
+* `touched: boolean`
 * `isValid: boolean`
 * `isInvalid: boolean`
 * `checkedOption: Option | null`

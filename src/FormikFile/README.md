@@ -18,6 +18,7 @@ FormikFile helps to connect a file uploader to Formik state.
 * `value: any`
 * `filesState: CustomFile[]`
 * `error: string`
+* `touched: boolean`
 * `isValid: boolean`
 * `isInvalid: boolean`
 * `onClick: () => void`

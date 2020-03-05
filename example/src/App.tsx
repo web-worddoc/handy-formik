@@ -24,7 +24,7 @@ export default class App extends Component {
                 radio: '1',
                 select: '1',
             }} onSubmit={() => { }} render={({ names, ...rest }) => {
-                console.log(rest);
+
                 return (
                     <FormikForm render={() => {
                         return (
@@ -38,6 +38,7 @@ export default class App extends Component {
                                     )
                                 }} />
                                 <FormikCustom name={names.custom} render={(props) => {
+                                    console.log(props);
                                     const onChange = (e: any) => {
                                         props.onChange(e.target.value);
                                     }

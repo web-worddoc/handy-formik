@@ -12,6 +12,7 @@ type OutputProps = {
     name: string;
     value: any;
     error: any;
+    touched: boolean;
     isValid: boolean;
     isInvalid: boolean;
 
@@ -30,7 +31,11 @@ export const FormikInput = ({
         getFieldProps,
         values,
         errors,
+        touched,
     }: any = useFormikContext();
+
+    const isValid = touched[name] && !errors[name] && (typeof values[name] === 'number' ? isFinite(values[name]) : !!values[name]);
+    const isInvalid = touched[name] && !!errors[name];
 
     return (
         <>
@@ -38,8 +43,9 @@ export const FormikInput = ({
                 render({
                     ...getFieldProps(name),
                     error: errors[name],
-                    isValid: !errors[name] && !!values[name],
-                    isInvalid: !!errors[name],
+                    touched: !!touched[name],
+                    isValid,
+                    isInvalid,
                 })
             }
         </>
