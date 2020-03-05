@@ -4,21 +4,21 @@ FormikRadio helps to connect `<input type="radio"/>` to Formik state.
 
 ## Props
 
-`render: (props: OutputProps) => ReactNode`
-`name: string`
-`options: Option[]`
+* `render: (props: OutputProps) => ReactNode`
+* `name: string`
+* `options: Option[]`
 
 ## OutputProps
 
-`name: string`
-`value: any`
-`error: any`
-`isValid: boolean`
-`isInvalid: boolean`
-`checkedOption: Option | null`
-`options: Option[]`
-`onBlur: (e: React.SyntheticEvent) => void`
-`onChange: (e: React.SyntheticEvent) => void`
+* `name: string`
+* `value: any`
+* `error: any`
+* `isValid: boolean`
+* `isInvalid: boolean`
+* `checkedOption: Option | null`
+* `options: Option[]`
+* `onBlur: (e: React.SyntheticEvent) => void`
+* `onChange: (e: React.SyntheticEvent) => void`
 
 ### Used types
 
