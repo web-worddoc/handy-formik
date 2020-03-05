@@ -4,18 +4,18 @@ FormikCustom helps to connect a custom element for input to Formik state. It mig
 
 ## Props
 
-`render: (props: OutputProps) => ReactNode`
-`name: string`
+* `render: (props: OutputProps) => ReactNode`
+* `name: string`
 
 ## OutputProps
 
-`name: string`
-`value: any`
-`error: any`
-`isValid: boolean`
-`isInvalid: boolean`
-`onBlur: (e: React.SyntheticEvent) => void`
-`onChange: (e: React.SyntheticEvent) => void`
+* `name: string`
+* `value: any`
+* `error: any`
+* `isValid: boolean`
+* `isInvalid: boolean`
+* `onBlur: (e: React.SyntheticEvent) => void`
+* `onChange: (e: React.SyntheticEvent) => void`
 
 ## Usage
 
