@@ -6,7 +6,7 @@ This is an entry point for a single form. It holds a state of underlying form an
 
 * `render: (props: OutputProps) => ReactNode`
 * [initialValues: Values](https://jaredpalmer.com/formik/docs/api/formik#initialvalues-values)
-* [onSubmit: (values: Values, formikBag: FormikBag) => void | Promise<any>](https://jaredpalmer.com/formik/docs/api/*formik#onsubmit-values-values-formikbag-formikbag--void--promiseany)
+* [onSubmit: (values: Values, formikBag: FormikBag) => void | Promise<any>](https://jaredpalmer.com/formik/docs/api/formik#onsubmit-values-values-formikbag-formikbag--void--promiseany)
 * [enableReinitialize?: boolean (default: true)](https://jaredpalmer.com/formik/docs/api/formik#enablereinitialize-boolean)
 * [initialErrors?: FormikErrors<Values>](https://jaredpalmer.com/formik/docs/api/formik#initialerrors-formikerrorsvalues)
 * [initialStatus?: any](https://jaredpalmer.com/formik/docs/api/formik#initialstatus-any)
