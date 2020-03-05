@@ -4,6 +4,7 @@ import { useFormikContext } from 'formik';
 
 type Props = {
     name: string;
+
     render: (props: OutputProps) => React.ReactNode;
 }
 
@@ -13,7 +14,7 @@ type OutputProps = {
     error: string;
     isValid: boolean;
     isInvalid: boolean;
-    formikBag: any;
+
     onBlur: (e: React.SyntheticEvent) => void;
     onChange: (value: any) => void;
 };
@@ -41,7 +42,6 @@ export const FormikCustom = ({ name, render }: Props) => {
                     error: errors[name],
                     isValid: !errors[name] && !!values[name],
                     isInvalid: !!errors[name],
-                    formikBag: useFormikContext(),
                     onChange: handleChange,
                 })
             }

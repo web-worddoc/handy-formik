@@ -4,19 +4,20 @@ import { useFormikContext } from 'formik';
 
 type Props = {
     name: string;
-    render: (props: OutputProps) => React.ReactNode;
     options: Option[];
+
+    render: (props: OutputProps) => React.ReactNode;
 }
 
 type OutputProps = {
     name: string;
     value: any;
-    error: string;
+    error: any;
     isValid: boolean;
     isInvalid: boolean;
-    checkedOption: Option;
+    checkedOption: Option | null;
     options: Option[];
-    formikBag: any;
+
     onBlur: (e: React.SyntheticEvent) => void;
     onChange: (e: React.SyntheticEvent) => void;
 };
@@ -38,10 +39,9 @@ export const FormikRadio = ({ name, render, options }: Props) => {
         errors,
     }: any = useFormikContext();
 
-    const checkedOption = options.find(item => item.value === values[name]) || {
-        label: null,
-        value: null
-    }
+    const checkedOption = React.useMemo(() => {
+        return options.find((option: Option) => option.value === values[name]) || null;
+    }, [options, values]);
 
     const handleChange = React.useCallback((e: { target: { value: any } }) => {
         setFieldValue(name, e.target.value);
@@ -57,7 +57,6 @@ export const FormikRadio = ({ name, render, options }: Props) => {
                     isInvalid: !!errors[name],
                     checkedOption,
                     options,
-                    formikBag: useFormikContext(),
                     onChange: handleChange,
                 })
             }

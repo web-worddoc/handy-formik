@@ -4,17 +4,17 @@ import { useFormikContext } from 'formik';
 
 type Props = {
     name: string;
+
     render: (props: OutputProps) => React.ReactNode;
 }
 
 type OutputProps = {
     name: string;
-    value: any;
-    checked: boolean;
-    error: string;
+    value: boolean;
+    error: any;
     isValid: boolean;
     isInvalid: boolean;
-    formikBag: any;
+
     onBlur: (e: React.SyntheticEvent) => void;
     onChange: (e: React.SyntheticEvent) => void;
 };
@@ -30,6 +30,12 @@ export const FormikCheckbox = ({ name, render }: Props) => {
         errors,
     }: any = useFormikContext();
 
+    React.useEffect(() => {
+        if (typeof values[name] !== 'boolean') {
+            setFieldValue(name, false);
+        }
+    }, []);
+
     const handleChange = React.useCallback((e: { target: { checked: boolean } }) => {
         setFieldValue(name, e.target.checked);
     }, [name]);
@@ -39,11 +45,10 @@ export const FormikCheckbox = ({ name, render }: Props) => {
             {
                 render({
                     ...getFieldProps(name),
-                    checked: values[name] === true ? true : false,
+                    value: typeof values[name] !== 'boolean' ? false : values[name],
                     error: errors[name],
                     isValid: !errors[name] && !!values[name],
                     isInvalid: !!errors[name],
-                    formikBag: useFormikContext(),
                     onChange: handleChange,
                 })
             }

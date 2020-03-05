@@ -5,12 +5,13 @@ import Dropzone from 'react-dropzone';
 
 type Props = {
     name: string;
-    render: (props: OutputProps) => any;
     maxFiles?: number;
     maxSize?: number;
     multiple?: boolean;
     accept?: string;
     format?: Format;
+
+    render: (props: OutputProps) => any;
 }
 
 type OutputProps = {
@@ -20,7 +21,7 @@ type OutputProps = {
     error: string,
     isValid: boolean,
     isInvalid: boolean,
-    formikBag: any;
+
     onClick: () => void;
     onDelete: (targetIndex: number) => void;
     onBlur: (e: React.SyntheticEvent) => void;
@@ -56,10 +57,10 @@ export const FormikFile = ({ render, name, maxFiles, multiple, maxSize, accept, 
 
         acceptedFiles.forEach((file: File) => {
             const reader: any = new FileReader();
-            reader.onload = (event: { target: { result: string } }) => {
+            reader.onload = (e: { target: { result: string } }) => {
                 const origin = (() => {
                     if (format === 'base64')
-                        return event.target.result;
+                        return e.target.result;
                     else
                         return file;
                 })();
@@ -132,7 +133,6 @@ export const FormikFile = ({ render, name, maxFiles, multiple, maxSize, accept, 
                                 error: errors[name],
                                 isValid: !errors[name] && !!values[name],
                                 isInvalid: !!errors[name],
-                                formikBag: useFormikContext(),
                                 onClick: handleClick,
                                 onDelete: handleDelete,
                             })

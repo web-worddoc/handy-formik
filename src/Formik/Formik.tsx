@@ -3,22 +3,23 @@ import { Formik as FormikElement } from 'formik';
 
 
 type Props = {
-    initialValues: KeyValue;
-    onSubmit: (values: KeyValue[], formikBag: any) => any | void;
-    render: (props: OutputProps) => React.ReactNode;
+    initialValues: Values;
+
+    onSubmit: (values: Values, formikBag: any) => any | void;
+    render: (formikProps: OutputProps) => React.ReactNode;
 }
 
-type OutputProps= {
-    names: OutputNames;
+type OutputProps = {
+    names: Names;
     [key: string]: any;
 };
 
-type KeyValue = {
-    [key: string]: any
+type Names = {
+    [key: string]: string
 }
 
-type OutputNames = {
-    [key: string]: string
+type Values = {
+    [key: string]: any
 }
 
 export const Formik = ({ initialValues, onSubmit, render, ...rest }: Props) => {
@@ -26,10 +27,13 @@ export const Formik = ({ initialValues, onSubmit, render, ...rest }: Props) => {
     if (!initialValues) throw new Error(`Formik: prop 'initialValues' doesn't exist!`);
     if (!onSubmit) throw new Error(`Formik: prop 'onSubmit' doesn't exist!`);
 
-    const names = {};
-    for (let el in initialValues) {
-        names[el] = el;
-    }
+    const names = React.useMemo(() => {
+        const res = {};
+        for (let el in initialValues) {
+            res[el] = el;
+        }
+        return res;
+    }, [initialValues]);
 
     return (
         <FormikElement
@@ -41,7 +45,10 @@ export const Formik = ({ initialValues, onSubmit, render, ...rest }: Props) => {
             {...rest}
             render={(formikProps) => (
                 <>
-                    {render({ ...formikProps, ...{ names } })}
+                    {render({
+                        ...formikProps,
+                        ...{ names },
+                    })}
                 </>
             )}
         >

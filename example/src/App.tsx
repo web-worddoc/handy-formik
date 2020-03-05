@@ -3,14 +3,14 @@ import React, { Component, Fragment } from 'react'
 import {
     Formik,
     FormikForm,
-    FormikCheckboxConnector,
-    FormikCustomConnector,
-    FormikInputConnector,
-    FormikRadioConnector,
-    FormikSelectConnector,
-    FormikStateConnector,
-    FormikFileConnector,
-} from 'formik-components'
+    FormikCheckbox,
+    FormikCustom,
+    FormikInput,
+    FormikRadio,
+    FormikSelect,
+    FormikState,
+    FormikFile,
+} from 'handy-formik';
 
 export default class App extends Component {
   render () {
@@ -23,12 +23,13 @@ export default class App extends Component {
                 input: '',
                 radio: '1',
                 select: '1',
-            }} onSubmit={() => { }} render={({ names }) => {
+            }} onSubmit={() => { }} render={({ names, ...rest }) => {
+                console.log(rest);
                 return (
-                    <FormikForm render={(formikBag) => {
+                    <FormikForm render={() => {
                         return (
                             <Fragment>
-                                <FormikCheckboxConnector name={names.checkbox} render={(props) => {
+                                <FormikCheckbox name={names.checkbox} render={(props) => {
                                     return (
                                         <div>
                                             {props.value + ''}
@@ -36,7 +37,7 @@ export default class App extends Component {
                                         </div>
                                     )
                                 }} />
-                                <FormikCustomConnector name={names.custom} render={(props) => {
+                                <FormikCustom name={names.custom} render={(props) => {
                                     const onChange = (e: any) => {
                                         props.onChange(e.target.value);
                                     }
@@ -47,7 +48,7 @@ export default class App extends Component {
                                         </div>
                                     )
                                 }} />
-                                <FormikFileConnector name={names.file} format="base64" multiple render={(props) => {
+                                <FormikFile name={names.file} format="base64" multiple render={(props) => {
                                     return (
                                         <div>
                                             <button {...props}>FILE</button>
@@ -57,7 +58,7 @@ export default class App extends Component {
                                         </div>
                                     )
                                 }} />
-                                <FormikInputConnector name={names.input} render={(props) => {
+                                <FormikInput name={names.input} render={(props) => {
                                     return (
                                         <div>
                                             {props.value + ''}
@@ -65,7 +66,7 @@ export default class App extends Component {
                                         </div>
                                     )
                                 }} />
-                                <FormikRadioConnector name={names.radio} options={[
+                                <FormikRadio name={names.radio} options={[
                                     {
                                         label: 1,
                                         value: '1',
@@ -87,7 +88,7 @@ export default class App extends Component {
                                         </div>
                                     )
                                 }} />
-                                <FormikSelectConnector name={names.select} options={[
+                                <FormikSelect name={names.select} options={[
                                     {
                                         label: '111',
                                         value: '1'
@@ -117,7 +118,7 @@ export default class App extends Component {
                                         </div>
                                     )
                                 }} />
-                                <FormikStateConnector render={(props) => {
+                                <FormikState render={(props) => {
                                     return (
                                         <div>
                                             {/* {props.values['select']} */}
