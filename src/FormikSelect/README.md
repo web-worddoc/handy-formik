@@ -4,21 +4,21 @@ FormikSelect helps to connect a native or custom select to Formik state.
 
 ## Props
 
-`render: (props: OutputProps) => ReactNode`
-`name: string`
-`options: Option[];`
+* `render: (props: OutputProps) => ReactNode`
+* `name: string`
+* `options: Option[];`
 
 ## OutputProps
 
-`name: string`
-`value: any`
-`error: any`
-`isValid: boolean`
-`isInvalid: boolean`
-`selectedOption: Option | null`
-`options: Option[]`
-`onBlur: (e: React.SyntheticEvent) => void`
-`onChange: (value: any) => void`
+* `name: string`
+* `value: any`
+* `error: any`
+* `isValid: boolean`
+* `isInvalid: boolean`
+* `selectedOption: Option | null`
+* `options: Option[]`
+* `onBlur: (e: React.SyntheticEvent) => void`
+* `onChange: (value: any) => void`
 
 ### Used types
 

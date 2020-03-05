@@ -4,18 +4,18 @@ FormikCheckbox helps to connect `<input type="checkbox"/>` to Formik state.
 
 ## Props
 
-`render: (props: OutputProps) => ReactNode`
-`name: string`
+* `render: (props: OutputProps) => ReactNode`
+* `name: string`
 
 ## OutputProps
 
-`name: string`
-`value: boolean`
-`error: any`
-`isValid: boolean`
-`isInvalid: boolean`
-`onBlur: (e: React.SyntheticEvent) => void`
-`onChange: (e: React.SyntheticEvent) => void`
+* `name: string`
+* `value: boolean`
+* `error: any`
+* `isValid: boolean`
+* `isInvalid: boolean`
+* `onBlur: (e: React.SyntheticEvent) => void`
+* `onChange: (e: React.SyntheticEvent) => void`
 
 ## Usage
 

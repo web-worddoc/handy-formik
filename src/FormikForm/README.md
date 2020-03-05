@@ -4,11 +4,11 @@ FormikForm is a small wrapper around an HTML `<form>` element that automatically
 
 ## Props
 
-`render: (props: OutputProps) => ReactNode`
+* `render: (props: OutputProps) => ReactNode`
 
 ## OutputProps
 
-`FormikProps<FormikBag>`
+* `FormikProps<FormikBag>`
 
 ## Usage
 
