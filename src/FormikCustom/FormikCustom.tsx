@@ -12,6 +12,7 @@ type OutputProps = {
     name: string;
     value: any;
     error: string;
+    touched: boolean;
     isValid: boolean;
     isInvalid: boolean;
 
@@ -28,11 +29,15 @@ export const FormikCustom = ({ name, render }: Props) => {
         setFieldValue,
         values,
         errors,
+        touched,
     }: any = useFormikContext();
 
     const handleChange = React.useCallback((value: any) => {
         setFieldValue(name, value);
     }, [name]);
+
+    const isValid = touched[name] && !errors[name] && (typeof values[name] === 'number' ? isFinite(values[name]) : !!values[name]);
+    const isInvalid = touched[name] && !!errors[name];
 
     return (
         <>
@@ -40,8 +45,9 @@ export const FormikCustom = ({ name, render }: Props) => {
                 render({
                     ...getFieldProps(name),
                     error: errors[name],
-                    isValid: !errors[name] && !!values[name],
-                    isInvalid: !!errors[name],
+                    touched: !!touched[name],
+                    isValid,
+                    isInvalid,
                     onChange: handleChange,
                 })
             }

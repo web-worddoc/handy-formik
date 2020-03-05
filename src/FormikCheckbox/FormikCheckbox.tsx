@@ -12,6 +12,7 @@ type OutputProps = {
     name: string;
     value: boolean;
     error: any;
+    touched: boolean;
     isValid: boolean;
     isInvalid: boolean;
 
@@ -28,6 +29,7 @@ export const FormikCheckbox = ({ name, render }: Props) => {
         setFieldValue,
         values,
         errors,
+        touched,
     }: any = useFormikContext();
 
     React.useEffect(() => {
@@ -40,15 +42,20 @@ export const FormikCheckbox = ({ name, render }: Props) => {
         setFieldValue(name, e.target.checked);
     }, [name]);
 
+    const value = typeof values[name] !== 'boolean' ? false : values[name];
+    const isValid = touched[name] && !errors[name] && typeof value === 'boolean';
+    const isInvalid = touched[name] && !!errors[name];
+
     return (
         <>
             {
                 render({
                     ...getFieldProps(name),
-                    value: typeof values[name] !== 'boolean' ? false : values[name],
+                    value,
                     error: errors[name],
-                    isValid: !errors[name] && !!values[name],
-                    isInvalid: !!errors[name],
+                    touched: !!touched[name],
+                    isValid,
+                    isInvalid,
                     onChange: handleChange,
                 })
             }

@@ -13,6 +13,7 @@ type OutputProps = {
     name: string;
     value: any;
     error: any;
+    touched: boolean;
     isValid: boolean;
     isInvalid: boolean;
     checkedOption: Option | null;
@@ -37,6 +38,7 @@ export const FormikRadio = ({ name, render, options }: Props) => {
         setFieldValue,
         values,
         errors,
+        touched,
     }: any = useFormikContext();
 
     const checkedOption = React.useMemo(() => {
@@ -47,14 +49,18 @@ export const FormikRadio = ({ name, render, options }: Props) => {
         setFieldValue(name, e.target.value);
     }, [name]);
 
+    const isValid = touched[name] && !errors[name] && (typeof values[name] === 'number' ? isFinite(values[name]) : !!values[name]);
+    const isInvalid = touched[name] && !!errors[name];
+
     return (
         <>
             {
                 render({
                     ...getFieldProps(name),
                     error: errors[name],
-                    isValid: !errors[name] && !!values[name],
-                    isInvalid: !!errors[name],
+                    touched: !!touched[name],
+                    isValid,
+                    isInvalid,
                     checkedOption,
                     options,
                     onChange: handleChange,
