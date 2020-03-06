@@ -47,17 +47,17 @@ export const FormikRadio = ({ name, render, options }: Props) => {
 
     const handleChange = React.useCallback((e: { target: { value: any } }) => {
         setFieldValue(name, e.target.value);
-    }, [name]);
+    }, []);
 
-    const isValid = touched[name] && !errors[name] && (typeof values[name] === 'number' ? isFinite(values[name]) : !!values[name]);
-    const isInvalid = touched[name] && !!errors[name];
+    const isValid = touched[name] ? !errors[name] && (typeof values[name] === 'number' ? isFinite(values[name]) : !!values[name]) : null;
+    const isInvalid = touched[name] ? !!errors[name] : null;
 
     return (
         <>
             {
                 render({
                     ...getFieldProps(name),
-                    error: errors[name],
+                    error: touched[name] && errors[name],
                     touched: !!touched[name],
                     isValid,
                     isInvalid,
