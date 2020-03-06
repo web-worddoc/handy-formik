@@ -43,8 +43,8 @@ export const FormikCheckbox = ({ name, render }: Props) => {
     }, [name]);
 
     const value = typeof values[name] !== 'boolean' ? false : values[name];
-    const isValid = touched[name] && !errors[name] && typeof value === 'boolean';
-    const isInvalid = touched[name] && !!errors[name];
+    const isValid = touched[name] ? !errors[name] : null;
+    const isInvalid = touched[name] ? !!errors[name] : null;
 
     return (
         <>
@@ -52,7 +52,7 @@ export const FormikCheckbox = ({ name, render }: Props) => {
                 render({
                     ...getFieldProps(name),
                     value,
-                    error: errors[name],
+                    error: touched[name] ? errors[name] : undefined,
                     touched: !!touched[name],
                     isValid,
                     isInvalid,

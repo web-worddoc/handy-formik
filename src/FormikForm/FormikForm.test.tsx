@@ -1,7 +1,7 @@
 import React from 'react';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { Formik } from './Formik';
+import { Formik, FormikForm } from './../';
 configure({ adapter: new Adapter() });
 
 
@@ -9,15 +9,17 @@ const TestComponent = () => (
     <div>test</div>
 )
 
-describe('Formik', () => {
+describe('FormikForm', () => {
     const component = mount(
         <Formik
             initialValues={{
                 testName: 'test value'
             }}
             onSubmit={jest.fn()}
-            render={props => (
-                <TestComponent {...props} />
+            render={() => (
+                <FormikForm render={props => (
+                    <TestComponent {...props} />
+                )}/>
             )}
         />
     )
@@ -27,9 +29,6 @@ describe('Formik', () => {
         expect(component.find('div').text()).toBe('test');
     });
 
-    it('descends expected custom props', () => {
-        expect(props.names).toMatchObject({ testName: 'testName' });
-    })
     it('descends expected native props', () => {
         expect(props.initialValues).toMatchObject({ testName: 'test value' });
         expect(props.errors).toMatchObject({});

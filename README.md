@@ -20,7 +20,7 @@ yarn add handy-formik
 
 ### References
 
-handy-formik provides with following components:
+handy-formik provides following components:
 
 * [Formik](https://github.com/web-worddoc/handy-formik/tree/dev/src/Formik)
 * [FormikForm](https://github.com/web-worddoc/handy-formik/tree/dev/src/FormikForm)

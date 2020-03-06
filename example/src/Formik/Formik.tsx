@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { Formik as FormikElement } from 'formik';
+import { Formik as FormikElement, useFormikContext } from 'formik';
 
 
 type Props = {
@@ -28,8 +28,8 @@ export const Formik = ({ initialValues, onSubmit, render, ...rest }: Props) => {
     if (!initialValues) throw new Error(`Formik: prop 'initialValues' doesn't exist!`);
     if (!onSubmit) throw new Error(`Formik: prop 'onSubmit' doesn't exist!`);
 
-    const names: Names = React.useMemo(() => {
-        const res = {};
+    const names = React.useMemo(() => {
+        const res: Names = {};
         for (let el in initialValues) {
             res[el] = el;
         }
