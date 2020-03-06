@@ -7,6 +7,7 @@ type Props = {
 
     onSubmit: (values: Values, formikBag: any) => any | void;
     render: (formikProps: OutputProps) => React.ReactNode;
+    [key: string]: any
 }
 
 type OutputProps = {
@@ -43,7 +44,8 @@ export const Formik = ({ initialValues, onSubmit, render, ...rest }: Props) => {
             initialValues={initialValues}
             onSubmit={onSubmit}
             {...rest}
-            render={(formikProps) => (
+        >
+            {(formikProps) => (
                 <>
                     {render({
                         ...formikProps,
@@ -51,7 +53,6 @@ export const Formik = ({ initialValues, onSubmit, render, ...rest }: Props) => {
                     })}
                 </>
             )}
-        >
         </FormikElement>
     )
 }
