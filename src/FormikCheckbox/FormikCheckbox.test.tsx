@@ -13,8 +13,9 @@ Yup.addMethod(Yup.mixed, 'checked', function(message: string) {
     });
 });
 
+const ERROR_TEXT = 'This is required field';
 const schema = Yup.object().shape({
-    check: Yup.mixed().checked('This is required field')
+    check: Yup.mixed().checked(ERROR_TEXT)
 })
 
 const TestCheckbox = ({ name, value, error, onBlur, onChange }: any) => (
@@ -82,7 +83,7 @@ describe('FormikCheckbox', () => {
             component.find('.input').simulate('blur')
         });
         component.update();
-        expect(component.find('.error').text()).toBe('This is required field'); // has error if touched and value === false
+        expect(component.find('.error').text()).toBe(ERROR_TEXT); // has error if touched and value === false
         expect(component.find(TestCheckbox).prop('isValid')).toBe(false); // no isValid status if touched and value === false
         expect(component.find(TestCheckbox).prop('isInvalid')).toBe(true); // is invalid if touched and value === false
         

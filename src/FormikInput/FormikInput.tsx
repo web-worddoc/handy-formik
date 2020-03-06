@@ -37,7 +37,7 @@ export const FormikInput = ({
 
     const handleChange = React.useCallback((e: { target: { value: string } }) => {
         setFieldValue(name, e.target.value);
-    }, [name]);
+    }, []);
 
     const isValid = touched[name] ? !errors[name] && (typeof values[name] === 'number' ? isFinite(values[name]) : !!values[name]) : null;
     const isInvalid = touched[name] ? !!errors[name] : null;

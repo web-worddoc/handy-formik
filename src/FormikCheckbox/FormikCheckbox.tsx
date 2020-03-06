@@ -40,7 +40,7 @@ export const FormikCheckbox = ({ name, render }: Props) => {
 
     const handleChange = React.useCallback((e: { target: { checked: boolean } }) => {
         setFieldValue(name, e.target.checked);
-    }, [name]);
+    }, []);
 
     const value = typeof values[name] !== 'boolean' ? false : values[name];
     const isValid = touched[name] ? !errors[name] : null;
