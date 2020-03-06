@@ -1,4 +1,5 @@
 import React, { Component, Fragment } from 'react'
+import * as Yup from 'yup';
 
 import {
     Formik,
@@ -12,28 +13,60 @@ import {
     FormikFile,
 } from 'handy-formik';
 
+
+declare module 'yup' {
+    interface MixedSchema {
+        containsDigitAndUppercase(value: string): MixedSchema,
+        eightOrMore(value: string): MixedSchema,
+        checked(value: string): MixedSchema,
+    }
+
+    interface StringSchema {
+        notZero(value: string): StringSchema,
+    }
+}
+
+
+
+Yup.addMethod(Yup.mixed, 'checked', function(message) {
+    return this.test('Is checked', message, (value = '') => {
+        return value === true;
+    });
+});
+
+const schema = Yup.object().shape({
+    checkbox: Yup.mixed().checked('This is required field'),
+    custom: Yup.mixed().required('REQUIRED'),
+    file: Yup.mixed().required('REQUIRED'),
+    input: Yup.mixed().required('REQUIRED'),
+    radio: Yup.mixed().required('REQUIRED'),
+    select: Yup.mixed().required('REQUIRED'),
+})
+
 export default class App extends Component {
   render () {
     return (
       <div>
-            <Formik initialValues={{
-                checkbox: '',
+            <Formik
+            initialValues={{
+                checkbox: false,
                 custom: '',
                 file: '',
                 input: '',
                 radio: '1',
                 select: '1',
-            }} onSubmit={() => { }} render={({ names, ...rest }) => {
-
+            }}
+            validationSchema={schema}
+            onSubmit={() => { }}
+            render={({ names, ...rest }) => {
                 return (
                     <FormikForm render={() => {
                         return (
                             <Fragment>
-                                <FormikCheckbox name={names.checkbox} render={(props) => {
+                                <FormikCheckbox name={names.checkbox} render={({value, error, ...rest}) => {
                                     return (
                                         <div>
-                                            {props.value + ''}
-                                            <input type="checkbox" {...props}/>
+                                            <input type="checkbox" checked={value} {...rest}/>
                                         </div>
                                     )
                                 }} />
@@ -83,7 +116,7 @@ export default class App extends Component {
                                             {props.options.map(el => (
                                                 <div>
                                                     {el.label}
-                                                    <input type="radio" id="radio" name={names.radio} value={el.value} checked={el.value === props.checkedOption.value} onChange={props.onChange}/>
+                                                    <input type="radio" id="radio" name={names.radio} value={el.value} checked={props.checkedOption ? el.value === props.checkedOption.value : false} onChange={props.onChange}/>
                                                 </div>
                                             ))}
                                         </div>
@@ -106,10 +139,10 @@ export default class App extends Component {
                                     return (
                                         <div>
                                             {props.value + ''}
-                                            <select value={props.selectedOption.value} onChange={e => {
+                                            <select value={props.selectedOption && props.selectedOption.value} onChange={e => {
                                                 props.onChange(e.target.value)
                                             }}>
-                                                <option value={props.selectedOption.value}>{props.selectedOption.label}</option>
+                                                <option value={props.selectedOption && props.selectedOption.value}>{props.selectedOption && props.selectedOption.label}</option>
                                                 {props.options.map(el => (
                                                     <Fragment>
                                                         <option value={el.value}>{el.label}</option>
