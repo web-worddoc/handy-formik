@@ -2,7 +2,7 @@ import React, { Component, Fragment } from 'react'
 import * as Yup from 'yup';
 
 import {
-    Formik,
+    // Formik,
     FormikForm,
     FormikCheckbox,
     FormikCustom,
@@ -12,6 +12,8 @@ import {
     FormikState,
     FormikFile,
 } from 'handy-formik';
+import { useFormikContext } from 'formik';
+import { Formik } from './Formik';
 
 
 declare module 'yup' {
@@ -38,7 +40,7 @@ const schema = Yup.object().shape({
     checkbox: Yup.mixed().checked('This is required field'),
     custom: Yup.mixed().required('REQUIRED'),
     file: Yup.mixed().required('REQUIRED'),
-    input: Yup.mixed().required('REQUIRED'),
+    input: Yup.string().required('REQUIRED'),
     radio: Yup.mixed().required('REQUIRED'),
     select: Yup.mixed().required('REQUIRED'),
 })
@@ -63,7 +65,7 @@ export default class App extends Component {
                     <FormikForm render={() => {
                         return (
                             <Fragment>
-                                <FormikCheckbox name={names.checkbox} render={({value, error, ...rest}) => {
+                                <FormikCheckbox name={names.checkbox} render={({ value, error, ...rest }) => {
                                     return (
                                         <div>
                                             <input type="checkbox" checked={value} {...rest}/>
@@ -71,14 +73,14 @@ export default class App extends Component {
                                     )
                                 }} />
                                 <FormikCustom name={names.custom} render={(props) => {
-                                    console.log(props);
                                     const onChange = (e: any) => {
                                         props.onChange(e.target.value);
                                     }
                                     return (
                                         <div>
                                             {props.value + ''}
-                                            <input type="text" {...props} onChange={onChange}/>
+                                            <input type="text" {...props} onChange={onChange} />
+                                            {props.error && props.error}
                                         </div>
                                     )
                                 }} />

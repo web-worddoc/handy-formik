@@ -33,8 +33,8 @@ describe('FormikForm', () => {
         expect(props.initialValues).toMatchObject({ testName: 'test value' });
         expect(props.errors).toMatchObject({});
         expect(props.touched).toMatchObject({});
-        expect(props.validateOnBlur).toBeTruthy();
-        expect(props.validateOnChange).toBeFalsy();
+        expect(props.validateOnBlur).toBe(false);
+        expect(props.validateOnChange).toBe(true);
         expect(props.validateOnMount).toBeFalsy();
         expect(props).toHaveProperty('status');
         expect(props).toHaveProperty('isSubmitting');
