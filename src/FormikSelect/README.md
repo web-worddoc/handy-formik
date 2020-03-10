@@ -12,10 +12,10 @@ FormikSelect helps to connect a native or custom select to Formik state.
 
 * `name: string`
 * `value: any`
-* `error: any`
+* `error: any | null`
 * `touched: boolean`
-* `isValid: boolean`
-* `isInvalid: boolean`
+* `isValid: boolean | null`
+* `isInvalid: boolean | null`
 * `selectedOption: Option | null`
 * `options: Option[]`
 * `onBlur: (e: React.SyntheticEvent) => void`
@@ -30,7 +30,7 @@ FormikSelect helps to connect a native or custom select to Formik state.
 
 ## Usage
 
-```javascript
+```js
 import React from 'react';
 import {
     Formik,

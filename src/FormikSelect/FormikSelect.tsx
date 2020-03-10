@@ -31,7 +31,7 @@ type Option = {
 export const FormikSelect = ({ name, render, options }: Props) => {
     if (!name) throw new Error(`FormikSelect: prop 'name' doesn't exist!`);
     if (!render) throw new Error(`FormikSelect: prop 'render' doesn't exist!`);
-    if (!options) throw new Error(`FormikSelect: prop 'options' doesn't exist!`);
+    if (!options || !Array.isArray(options)) throw new Error(`FormikSelect: prop 'options' doesn't exist or not an array!`);
 
     const {
         getFieldProps,

@@ -12,10 +12,10 @@ type Props = {
 type OutputProps = {
     name: string;
     value: any;
-    error: any;
+    error: any | null;
     touched: boolean;
-    isValid: boolean;
-    isInvalid: boolean;
+    isValid: boolean | null;
+    isInvalid: boolean | null;
     checkedOption: Option | null;
     options: Option[];
 
@@ -31,7 +31,7 @@ type Option = {
 export const FormikRadio = ({ name, render, options }: Props) => {
     if (!name) throw new Error(`FormikRadio: prop 'name' doesn't exist!`);
     if (!render) throw new Error(`FormikRadio: prop 'render' doesn't exist!`);
-    if (!options) throw new Error(`FormikRadio: prop 'options' doesn't exist!`);
+    if (!options || !Array.isArray(options)) throw new Error(`FormikRadio: prop 'options' doesn't exist or not an array!`);
 
     const {
         getFieldProps,
@@ -51,13 +51,14 @@ export const FormikRadio = ({ name, render, options }: Props) => {
 
     const isValid = touched[name] ? !errors[name] && (typeof values[name] === 'number' ? isFinite(values[name]) : !!values[name]) : null;
     const isInvalid = touched[name] ? !!errors[name] : null;
+    const error = touched[name] ? errors[name] || null : null;
 
     return (
         <>
             {
                 render({
                     ...getFieldProps(name),
-                    error: touched[name] && errors[name],
+                    error,
                     touched: !!touched[name],
                     isValid,
                     isInvalid,

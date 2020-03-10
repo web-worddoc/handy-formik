@@ -2,11 +2,12 @@ import React from 'react';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
 import { Formik } from './Formik';
+
+
 configure({ adapter: new Adapter() });
 
-
-const TestComponent = () => (
-    <div>test</div>
+const MockComponent = (props: any) => (
+    <></>
 )
 
 describe('Formik', () => {
@@ -17,56 +18,54 @@ describe('Formik', () => {
             }}
             onSubmit={jest.fn()}
             render={props => (
-                <TestComponent {...props} />
+                <MockComponent {...props} />
             )}
         />
     )
-    const props: any = component.find(TestComponent).props();
+    const props: any = component.find(MockComponent).props();
 
     it('renders correctly', () => {
-        expect(component.find('div').text()).toBe('test');
+        expect(component.find(MockComponent).exists()).toBe(true);
     });
 
-    it('descends expected custom props', () => {
-        expect(props.names).toMatchObject({ testName: 'testName' });
-    })
-    it('descends expected native props', () => {
-        expect(props.initialValues).toMatchObject({ testName: 'test value' });
-        expect(props.errors).toMatchObject({});
-        expect(props.touched).toMatchObject({});
-        expect(props.validateOnBlur).toBe(false);
-        expect(props.validateOnChange).toBe(true);
-        expect(props.validateOnMount).toBeFalsy();
+    it('descends expected props', () => {
+        expect(props.names).toEqual({ testName: 'testName' });
+        expect(props.initialValues).toEqual({ testName: 'test value' });
+        expect(props.errors).toEqual({});
+        expect(props.touched).toEqual({});
         expect(props).toHaveProperty('status');
-        expect(props).toHaveProperty('isSubmitting');
-        expect(props).toHaveProperty('isValidating');
-        expect(props).toHaveProperty('submitCount');
-        expect(props).toHaveProperty('initialErrors');
-        expect(props).toHaveProperty('initialTouched');
         expect(props).toHaveProperty('initialStatus');
-        expect(props).toHaveProperty('handleBlur');
-        expect(props).toHaveProperty('handleChange');
-        expect(props).toHaveProperty('handleReset');
-        expect(props).toHaveProperty('handleSubmit');
-        expect(props).toHaveProperty('resetForm');
-        expect(props).toHaveProperty('setErrors');
-        expect(props).toHaveProperty('setFormikState');
-        expect(props).toHaveProperty('setFieldTouched');
-        expect(props).toHaveProperty('setFieldValue');
-        expect(props).toHaveProperty('setFieldError');
-        expect(props).toHaveProperty('setStatus');
-        expect(props).toHaveProperty('setSubmitting');
-        expect(props).toHaveProperty('setTouched');
-        expect(props).toHaveProperty('setValues');
-        expect(props).toHaveProperty('submitForm');
-        expect(props).toHaveProperty('validateForm');
-        expect(props).toHaveProperty('validateField');
-        expect(props).toHaveProperty('isValid');
-        expect(props).toHaveProperty('dirty');
-        expect(props).toHaveProperty('unregisterField');
-        expect(props).toHaveProperty('registerField');
-        expect(props).toHaveProperty('getFieldProps');
-        expect(props).toHaveProperty('getFieldMeta');
-        expect(props).toHaveProperty('getFieldHelpers');
+        expect(props.validateOnBlur).not.toBe(undefined);
+        expect(props.validateOnChange).not.toBe(undefined);
+        expect(props.validateOnMount).not.toBe(undefined);
+        expect(props.isSubmitting).not.toBe(undefined);
+        expect(props.isValidating).not.toBe(undefined);
+        expect(props.submitCount).not.toBe(undefined);
+        expect(props.initialErrors).not.toBe(undefined);
+        expect(props.initialTouched).not.toBe(undefined);
+        expect(props.handleBlur).not.toBe(undefined);
+        expect(props.handleChange).not.toBe(undefined);
+        expect(props.handleReset).not.toBe(undefined);
+        expect(props.handleSubmit).not.toBe(undefined);
+        expect(props.resetForm).not.toBe(undefined);
+        expect(props.setErrors).not.toBe(undefined);
+        expect(props.setFormikState).not.toBe(undefined);
+        expect(props.setFieldTouched).not.toBe(undefined);
+        expect(props.setFieldValue).not.toBe(undefined);
+        expect(props.setFieldError).not.toBe(undefined);
+        expect(props.setStatus).not.toBe(undefined);
+        expect(props.setSubmitting).not.toBe(undefined);
+        expect(props.setTouched).not.toBe(undefined);
+        expect(props.setValues).not.toBe(undefined);
+        expect(props.submitForm).not.toBe(undefined);
+        expect(props.validateForm).not.toBe(undefined);
+        expect(props.validateField).not.toBe(undefined);
+        expect(props.isValid).not.toBe(undefined);
+        expect(props.dirty).not.toBe(undefined);
+        expect(props.unregisterField).not.toBe(undefined);
+        expect(props.registerField).not.toBe(undefined);
+        expect(props.getFieldProps).not.toBe(undefined);
+        expect(props.getFieldMeta).not.toBe(undefined);
+        expect(props.getFieldHelpers).not.toBe(undefined);
     })
 })

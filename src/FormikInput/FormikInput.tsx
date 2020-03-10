@@ -11,10 +11,10 @@ type Props = {
 type OutputProps = {
     name: string;
     value: any;
-    error: any;
+    error: any | null;
     touched: boolean;
-    isValid: boolean;
-    isInvalid: boolean;
+    isValid: boolean | null;
+    isInvalid: boolean | null;
 
     onBlur: (e: React.SyntheticEvent) => void;
     onChange: (e: React.SyntheticEvent) => void;
@@ -41,13 +41,14 @@ export const FormikInput = ({
 
     const isValid = touched[name] ? !errors[name] && (typeof values[name] === 'number' ? isFinite(values[name]) : !!values[name]) : null;
     const isInvalid = touched[name] ? !!errors[name] : null;
+    const error = touched[name] ? errors[name] || null : null;
 
     return (
         <>
             {
                 render({
                     ...getFieldProps(name),
-                    error: touched[name] && errors[name],
+                    error,
                     touched: !!touched[name],
                     isValid,
                     isInvalid,

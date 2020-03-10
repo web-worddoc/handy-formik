@@ -28,12 +28,12 @@ describe('Formik', () => {
     });
 
     it('descends expected custom props', () => {
-        expect(props.names).toMatchObject({ testName: 'testName' });
+        expect(props.names).toEqual({ testName: 'testName' });
     })
     it('descends expected native props', () => {
-        expect(props.initialValues).toMatchObject({ testName: 'test value' });
-        expect(props.errors).toMatchObject({});
-        expect(props.touched).toMatchObject({});
+        expect(props.initialValues).toEqual({ testName: 'test value' });
+        expect(props.errors).toEqual({});
+        expect(props.touched).toEqual({});
         expect(props.validateOnBlur).toBe(false);
         expect(props.validateOnChange).toBe(true);
         expect(props.validateOnMount).toBeFalsy();
