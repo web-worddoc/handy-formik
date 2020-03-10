@@ -30,7 +30,7 @@ FormikSelect helps to connect a native or custom select to Formik state.
 
 ## Usage
 
-```
+```javascript
 import React from 'react';
 import {
     Formik,

@@ -12,10 +12,10 @@ type Props = {
 type OutputProps = {
     name: string;
     value: any;
-    error: string,
+    error: string | null,
     touched: boolean;
-    isValid: boolean,
-    isInvalid: boolean,
+    isValid: boolean | null,
+    isInvalid: boolean | null,
     selectedOption: Option | null,
     options: Option[],
 
@@ -46,22 +46,23 @@ export const FormikSelect = ({ name, render, options }: Props) => {
     }, [options, values]);
 
     const restOptions = React.useMemo(() => {
-        return options.filter((option: Option) => selectedOption ? option.value !== selectedOption.value : null);
+        return options.filter((option: Option) => selectedOption ? option.value !== selectedOption.value : option.value);
     }, [selectedOption])
 
     const handleChange = React.useCallback((value: any) => {
         setFieldValue(name, value);
     }, [name]);
 
-    const isValid = touched[name] && !errors[name] && (typeof values[name] === 'number' ? isFinite(values[name]) : !!values[name]);
-    const isInvalid = touched[name] && !!errors[name];
-    
+    const isValid = touched[name] ? !errors[name] && (typeof values[name] === 'number' ? isFinite(values[name]) : !!values[name]) : null;
+    const isInvalid = touched[name] ? !!errors[name] : null;
+    const error = touched[name] ? errors[name] || null : null;
+
     return (
         <>
             {
                 render({
                     ...getFieldProps(name),
-                    error: errors[name],
+                    error,
                     touched: !!touched[name],
                     isValid,
                     isInvalid,
