@@ -11,16 +11,16 @@ FormikCustom helps to connect a custom element for input to Formik state. It mig
 
 * `name: string`
 * `value: any`
-* `error: any`
+* `error: any | null`
 * `touched: boolean`
-* `isValid: boolean`
-* `isInvalid: boolean`
+* `isValid: boolean | null`
+* `isInvalid: boolean | null`
 * `onBlur: (e: React.SyntheticEvent) => void`
 * `onChange: (e: React.SyntheticEvent) => void`
 
 ## Usage
 
-```
+```js
 import React from 'react';
 import {
     Formik,

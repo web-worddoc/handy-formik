@@ -24,7 +24,7 @@ This is an entry point for a single form. It holds a state of underlying form an
 
 ## Usage
 
-```
+```js
 import React from 'react';
 import { Formik, FormikForm } from 'handy-formik';
 

@@ -2,41 +2,25 @@ import React from 'react';
 import * as Yup from 'yup';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { Formik, FormikForm, FormikCustom } from './../';
 import { act } from "react-dom/test-utils";
+
+import { Formik, FormikForm, FormikCustom } from './../';
+import { ERROR_REQUIRED } from './../utils';
+
+
 configure({ adapter: new Adapter() });
 
-
-const ERROR_TEXT = 'This is required field';
 const schema = Yup.object().shape({
     data: Yup.object({
-        name: Yup.string().required(ERROR_TEXT),
+        name: Yup.string().required(ERROR_REQUIRED),
     })
 })
 
-const TestCustom = ({ name, value, error, onBlur, onChange }: any) => {
-    return (
-        <>
-            <input
-                className="input"
-                type="text"
-                name={name}
-                value={value.name}
-                onChange={onChange}
-                onBlur={onBlur}
-            />
-            {error && <div className="error">{error.name}</div>}
-        </>
-    )
-}
+const MockComponent = (props: any) => (
+    <></>
+)
 
 const getComponent = (props?: any) => {
-    const handler = (cb: Function) => (e: { target: {value: string} }) => {
-        cb({
-            name: e.target.value,
-        })
-    }
-
     return mount(
         <Formik
             initialValues={{
@@ -49,7 +33,7 @@ const getComponent = (props?: any) => {
             render={({ names }) => (
                 <FormikForm render={() => (
                     <FormikCustom name={names.data} render={props => (
-                        <TestCustom {...props} value={props.value} onChange={handler(props.onChange)}/>
+                        <MockComponent {...props}/>
                     )}/>
                 )}/>
             )}
@@ -60,53 +44,73 @@ const getComponent = (props?: any) => {
 describe('FormikCustom', () => {
     it('renders correctly', () => {
         const component = getComponent();
-        expect(component.find('.input').exists()).toBe(true);
+
+        expect(component.find(MockComponent).exists()).toBe(true);
+    })
+
+    it('descends expected props', () => {
+        const component = getComponent();
+
+        expect(component.find(MockComponent).prop('name')).not.toBe(undefined);
+        expect(component.find(MockComponent).prop('value')).not.toBe(undefined);
+        expect(component.find(MockComponent).prop('error')).not.toBe(undefined);
+        expect(component.find(MockComponent).prop('touched')).not.toBe(undefined);
+        expect(component.find(MockComponent).prop('isValid')).not.toBe(undefined);
+        expect(component.find(MockComponent).prop('isInvalid')).not.toBe(undefined);
+        expect(component.find(MockComponent).prop('onBlur')).not.toBe(undefined);
+        expect(component.find(MockComponent).prop('onChange')).not.toBe(undefined);
     })
 
     it('changes value correctly', async () => {
         const component = getComponent();
 
-        expect(component.find('.input').prop('value')).toBe('');
-        expect(component.find('TestCustom').prop('value')).toMatchObject({ name: '' });
+        expect(component.find(MockComponent).prop('value')).toEqual({ name: '' });
 
         await act(async () => {
-            component.find('.input').simulate('change', { target: { value: 'A' } });
+            component.find(MockComponent).prop('onChange')({
+                name: 'A'
+            });
         });
+
         component.update();
-        expect(component.find('.input').prop('value')).toBe('A');
-        expect(component.find('TestCustom').prop('value')).toMatchObject({ name: 'A' });
+        expect(component.find(MockComponent).prop('value')).toEqual({ name: 'A' });
 
         await act(async () => {
-            component.find('.input').simulate('change', {target: {value: ''}})
+            component.find(MockComponent).prop('onChange')({
+                name: ''
+            });
         });
+
         component.update();
-        expect(component.find('.input').prop('value')).toBe('');
-        expect(component.find('TestCustom').prop('value')).toMatchObject({ name: '' });
+        expect(component.find(MockComponent).prop('value')).toEqual({ name: '' });
     });
 
     it('validates correctly', async () => {
         const component = getComponent();
 
-        expect(component.find('.error').exists()).toBe(false); // no error if not touched and no value
-        expect(component.find(TestCustom).prop('isValid')).toBe(null); // no isValid status if not touched and no value
-        expect(component.find(TestCustom).prop('isInvalid')).toBe(null); // no isInvalid status if not touched and no value
+        expect(component.find(MockComponent).prop('error')).toBe(null); // no error if not touched and no value
+        expect(component.find(MockComponent).prop('isValid')).toBe(null); // no isValid status if not touched and no value
+        expect(component.find(MockComponent).prop('isInvalid')).toBe(null); // no isInvalid status if not touched and no value
 
         await act(async () => {
-            component.find('.input').simulate('change', { target: { value: 'A' } });
-            component.find('.input').simulate('blur');
+            component.find('form').simulate('submit');
         });
+
         component.update();
-        expect(component.find('.error').exists()).toBe(false); // no error if touched and has value
-        expect(component.find(TestCustom).prop('isValid')).toBe(true); // is valid if is not touched and has value
-        expect(component.find(TestCustom).prop('isInvalid')).toBe(false); // not invalid if is not touched and has value
+        expect(component.find(MockComponent).prop('error')).toEqual({ name: ERROR_REQUIRED }); // has error if submitted/touched and no value
+        expect(component.find(MockComponent).prop('isValid')).toBe(false); // no isValid status if submmitted/touched and no value
+        expect(component.find(MockComponent).prop('isInvalid')).toBe(true); // is invalid if submitted/touched and no value
 
         await act(async () => {
-            component.find('.input').simulate('change', {target: {value: ''}})
+            component.find(MockComponent).prop('onChange')({
+                name: 'A'
+            });
         });
+
         component.update();
-        expect(component.find('.error').text()).toBe(ERROR_TEXT); // has error if touched and no value
-        expect(component.find(TestCustom).prop('isValid')).toBe(false); // no isValid status if touched and no value
-        expect(component.find(TestCustom).prop('isInvalid')).toBe(true); // is invalid if touched and no value
+        expect(component.find(MockComponent).prop('error')).toBe(null); // no error if touched and has value
+        expect(component.find(MockComponent).prop('isValid')).toBe(true); // is valid if is not touched and has value
+        expect(component.find(MockComponent).prop('isInvalid')).toBe(false); // not invalid if is not touched and has value
     });
 
 })

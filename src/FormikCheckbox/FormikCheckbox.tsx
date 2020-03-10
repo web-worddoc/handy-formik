@@ -11,10 +11,10 @@ type Props = {
 type OutputProps = {
     name: string;
     value: boolean;
-    error: any;
+    error: any | null;
     touched: boolean;
-    isValid: boolean;
-    isInvalid: boolean;
+    isValid: boolean | null;
+    isInvalid: boolean | null;
 
     onBlur: (e: React.SyntheticEvent) => void;
     onChange: (e: React.SyntheticEvent) => void;
@@ -45,6 +45,7 @@ export const FormikCheckbox = ({ name, render }: Props) => {
     const value = typeof values[name] !== 'boolean' ? false : values[name];
     const isValid = touched[name] ? !errors[name] : null;
     const isInvalid = touched[name] ? !!errors[name] : null;
+    const error = touched[name] ? errors[name] || null : null;
 
     return (
         <>
@@ -52,7 +53,7 @@ export const FormikCheckbox = ({ name, render }: Props) => {
                 render({
                     ...getFieldProps(name),
                     value,
-                    error: touched[name] ? errors[name] : undefined,
+                    error,
                     touched: !!touched[name],
                     isValid,
                     isInvalid,

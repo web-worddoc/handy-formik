@@ -12,10 +12,10 @@ FormikRadio helps to connect `<input type="radio"/>` to Formik state.
 
 * `name: string`
 * `value: any`
-* `error: any`
+* `error: any | null`
 * `touched: boolean`
-* `isValid: boolean`
-* `isInvalid: boolean`
+* `isValid: boolean | null`
+* `isInvalid: boolean | null`
 * `checkedOption: Option | null`
 * `options: Option[]`
 * `onBlur: (e: React.SyntheticEvent) => void`
@@ -30,7 +30,7 @@ FormikRadio helps to connect `<input type="radio"/>` to Formik state.
 
 ## Usage
 
-```
+```js
 import React from 'react';
 import {
     Formik,

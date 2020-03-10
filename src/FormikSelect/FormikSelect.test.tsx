@@ -2,14 +2,16 @@ import React from 'react';
 import * as Yup from 'yup';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { Formik, FormikForm, FormikSelect } from './../';
 import { act } from "react-dom/test-utils";
+
+import { Formik, FormikForm, FormikSelect } from './../';
+import { ERROR_REQUIRED } from './../utils';
+
+
 configure({ adapter: new Adapter() });
 
-
-const ERROR_TEXT = 'This is required field'
 const schema = Yup.object().shape({
-    country: Yup.string().required(ERROR_TEXT)
+    country: Yup.string().required(ERROR_REQUIRED)
 })
 const OPTIONS = [
     {
@@ -58,6 +60,7 @@ const getComponent = (props?: any) => {
 describe('FormikSelect', () => {
     it('renders correctly', () => {
         const component = getComponent();
+
         expect(component.find(TestSelect).exists()).toBe(true);
     })
 
@@ -108,6 +111,7 @@ describe('FormikSelect', () => {
         await act(async () => {
             component.find(TestSelect).prop('onChange')('2');
         })
+
         component.update();
         expect(component.find(TestSelect).prop("value")).toBe('2');
         expect(component.find(TestSelect).prop("selectedOption")).toEqual({
@@ -122,6 +126,7 @@ describe('FormikSelect', () => {
         await act(async () => {
             component.find(TestSelect).prop('onChange')('3');
         })
+
         component.update();
         expect(component.find(TestSelect).prop("value")).toBe('3');
         expect(component.find(TestSelect).prop("selectedOption")).toEqual({
@@ -145,14 +150,16 @@ describe('FormikSelect', () => {
         await act(async () => {
             component.find('form').simulate('submit');
         });
+
         component.update();
-        expect(component.find(TestSelect).prop('error')).toBe(ERROR_TEXT); // has error if submitted and no value
+        expect(component.find(TestSelect).prop('error')).toBe(ERROR_REQUIRED); // has error if submitted and no value
         expect(component.find(TestSelect).prop('isValid')).toBe(false); // not valid if submitted and no value
         expect(component.find(TestSelect).prop('isInvalid')).toBe(true); // is invalid if submitted and no value
 
         await act(async () => {
             component.find(TestSelect).prop('onChange')('2');
         });
+
         component.update();
         expect(component.find(TestSelect).prop('error')).toBe(null); // has error if submitted/touched and has value
         expect(component.find(TestSelect).prop('isValid')).toBe(true); // is valid if submitted/touched and has value

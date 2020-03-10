@@ -11,16 +11,16 @@ FormikCheckbox helps to connect `<input type="checkbox"/>` to Formik state.
 
 * `name: string`
 * `value: boolean`
-* `error: any`
+* `error: any | null`
 * `touched: boolean`
-* `isValid: boolean`
-* `isInvalid: boolean`
+* `isValid: boolean | null`
+* `isInvalid: boolean | null`
 * `onBlur: (e: React.SyntheticEvent) => void`
 * `onChange: (e: React.SyntheticEvent) => void`
 
 ## Usage
 
-```
+```js
 import React from 'react';
 import {
     Formik,

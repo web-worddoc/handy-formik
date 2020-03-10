@@ -2,35 +2,22 @@ import React from 'react';
 import * as Yup from 'yup';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
-import { Formik, FormikForm, FormikCheckbox } from './../';
 import { act } from "react-dom/test-utils";
+
+import { Formik, FormikForm, FormikCheckbox } from './../';
+import { ERROR_REQUIRED } from './../utils';
+
+
 configure({ adapter: new Adapter() });
 
-
-Yup.addMethod(Yup.mixed, 'checked', function(message: string) {
-    return this.test('Is checked', message, (value: boolean) => {
-        return value === true;
-    });
-});
-
-const ERROR_TEXT = 'This is required field';
 const schema = Yup.object().shape({
-    check: Yup.mixed().checked(ERROR_TEXT)
+    check: Yup.mixed().test('Is checked', ERROR_REQUIRED, (value: boolean) => {
+        return value === true;
+    })
 })
 
-const TestCheckbox = ({ name, value, error, onBlur, onChange }: any) => (
-    <>
-        <label className="label">Check it:</label>
-        <input
-            className="input"
-            type="checkbox"
-            name={name}
-            defaultChecked={value}
-            onChange={onChange}
-            onBlur={onBlur}
-        />
-        {error && <div className="error">{error}</div>}
-    </>
+const MockComponent = (props: any) => (
+    <></>
 )
 
 const getComponent = (props?: any) => {
@@ -44,7 +31,7 @@ const getComponent = (props?: any) => {
             render={({ names }) => (
                 <FormikForm render={() => (
                     <FormikCheckbox name={names.check} render={props => (
-                        <TestCheckbox {...props} />
+                        <MockComponent {...props} />
                     )}/>
                 )}/>
             )}
@@ -55,44 +42,65 @@ const getComponent = (props?: any) => {
 describe('FormikCheckbox', () => {
     it('renders correctly', () => {
         const component = getComponent();
-        expect(component.find('.label').text()).toBe('Check it:');
-        expect(component.find('.input').exists()).toBe(true);
+
+        expect(component.find(MockComponent).exists()).toBe(true);
     })
 
-    // toggle
+    it('descends expected props', () => {
+        const component = getComponent();
+
+        expect(component.find(MockComponent).prop('name')).not.toBe(undefined);
+        expect(component.find(MockComponent).prop('value')).not.toBe(undefined);
+        expect(component.find(MockComponent).prop('error')).not.toBe(undefined);
+        expect(component.find(MockComponent).prop('touched')).not.toBe(undefined);
+        expect(component.find(MockComponent).prop('isValid')).not.toBe(undefined);
+        expect(component.find(MockComponent).prop('isInvalid')).not.toBe(undefined);
+        expect(component.find(MockComponent).prop('onBlur')).not.toBe(undefined);
+        expect(component.find(MockComponent).prop('onChange')).not.toBe(undefined);
+    })
+
     it('toggles correctly', async () => {
         const component = getComponent();
 
-        component.find('.input').simulate('change', {target: {checked: true}});
-        expect(component.find('.input').prop('defaultChecked')).toBe(true);
+        await act(async () => {
+            component.find(MockComponent).prop('onChange')({target: {checked: true}});
+        });
+        
+        component.update();
+        expect(component.find(MockComponent).prop('value')).toBe(true);
 
-        component.find('.input').simulate('change');
-        expect(component.find('.input').prop('defaultChecked')).toBe(false);
+        await act(async () => {
+            component.find(MockComponent).prop('onChange')({target: {checked: false}});
+        });
+        
+        component.update();
+        expect(component.find(MockComponent).prop('value')).toBe(false);
     });
 
-    // validation
-    it('validates correctly', async () => {
+    it('is validated correctly', async () => {
         const component = getComponent();
 
-        expect(component.find('.error').exists()).toBe(false); // no error if not touched and value === false
-        expect(component.find(TestCheckbox).prop('isValid')).toBe(null); // no isValid status if not touched and value === false
-        expect(component.find(TestCheckbox).prop('isInvalid')).toBe(null); // no isInvalid status if not touched and value === false
+        expect(component.find(MockComponent).prop('error')).toBe(null); // no error if not touched and value === false
+        expect(component.find(MockComponent).prop('isValid')).toBe(null); // no isValid status if not touched and value === false
+        expect(component.find(MockComponent).prop('isInvalid')).toBe(null); // no isInvalid status if not touched and value === false
 
         await act(async () => {
-            component.find('.input').simulate('change', {target: {checked: false}})
-            component.find('.input').simulate('blur')
+            component.find(MockComponent).prop('onChange')({target: {checked: false}});
+            component.find('form').simulate('submit')
         });
+
         component.update();
-        expect(component.find('.error').text()).toBe(ERROR_TEXT); // has error if touched and value === false
-        expect(component.find(TestCheckbox).prop('isValid')).toBe(false); // no isValid status if touched and value === false
-        expect(component.find(TestCheckbox).prop('isInvalid')).toBe(true); // is invalid if touched and value === false
+        expect(component.find(MockComponent).prop('error')).toBe(ERROR_REQUIRED); // has error if touched and value === false
+        expect(component.find(MockComponent).prop('isValid')).toBe(false); // no isValid status if touched and value === false
+        expect(component.find(MockComponent).prop('isInvalid')).toBe(true); // is invalid if touched and value === false
         
         await act(async () => {
-            component.find('.input').simulate('change', { target: { checked: true } });
+            component.find(MockComponent).prop('onChange')({ target: { checked: true } });
         });
+
         component.update();
-        expect(component.find('.error').exists()).toBe(false); // no error if touched and value === true
-        expect(component.find(TestCheckbox).prop('isValid')).toBe(true); // is valid if is not touched and value === true
-        expect(component.find(TestCheckbox).prop('isInvalid')).toBe(false); // not invalid if is not touched and value === true
+        expect(component.find(MockComponent).prop('error')).toBe(null); // no error if touched and value === true
+        expect(component.find(MockComponent).prop('isValid')).toBe(true); // is valid if is not touched and value === true
+        expect(component.find(MockComponent).prop('isInvalid')).toBe(false); // not invalid if is not touched and value === true
     });
 })

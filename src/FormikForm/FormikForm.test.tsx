@@ -1,12 +1,14 @@
 import React from 'react';
 import { configure, mount } from 'enzyme';
 import Adapter from 'enzyme-adapter-react-16';
+
 import { Formik, FormikForm } from './../';
+
+
 configure({ adapter: new Adapter() });
 
-
-const TestComponent = () => (
-    <div>test</div>
+const MockComponent = () => (
+    <></>
 )
 
 describe('FormikForm', () => {
@@ -18,21 +20,21 @@ describe('FormikForm', () => {
             onSubmit={jest.fn()}
             render={() => (
                 <FormikForm render={props => (
-                    <TestComponent {...props} />
+                    <MockComponent {...props} />
                 )}/>
             )}
         />
     )
-    const props: any = component.find(TestComponent).props();
+    const props: any = component.find(MockComponent).props();
 
     it('renders correctly', () => {
-        expect(component.find('div').text()).toBe('test');
+        expect(component.find(MockComponent).exists()).toBe(true);
     });
 
-    it('descends expected native props', () => {
-        expect(props.initialValues).toMatchObject({ testName: 'test value' });
-        expect(props.errors).toMatchObject({});
-        expect(props.touched).toMatchObject({});
+    it('descends expected props', () => {
+        expect(props.initialValues).toEqual({ testName: 'test value' });
+        expect(props.errors).toEqual({});
+        expect(props.touched).toEqual({});
         expect(props.validateOnBlur).toBe(false);
         expect(props.validateOnChange).toBe(true);
         expect(props.validateOnMount).toBeFalsy();
