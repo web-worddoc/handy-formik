@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { useFormikContext } from 'formik';
 
+import { shouldUpdate } from './../utils';
+
 
 type Props = {
     name: string;
@@ -20,7 +22,7 @@ type OutputProps = {
     onChange: (value: any) => void;
 };
 
-export const FormikCustom = ({ name, render }: Props) => {
+export const FormikCustom = React.memo(({ name, render }: Props) => {
     if (!name) throw new Error(`FormikCustom: prop 'name' doesn't exist!`);
     if (!render) throw new Error(`FormikCustom: prop 'render' doesn't exist!`);
 
@@ -54,4 +56,4 @@ export const FormikCustom = ({ name, render }: Props) => {
             }
         </>
     )
-}
+}, shouldUpdate)
