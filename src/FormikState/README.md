@@ -12,7 +12,7 @@ FormikSate helps to descent Formik state for any use. It might be usefull if you
 
 ## Usage
 
-```
+```js
 import React from 'react';
 import { FormikState } from 'handy-formik';
 
