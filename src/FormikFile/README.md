@@ -16,11 +16,12 @@ FormikFile helps to connect a file uploader to Formik state.
 
 * `name: string`
 * `value: any`
-* `files: CustomFile[]`
 * `touched: boolean`
+* `files: CustomFile[]`
 * `error: string | null`
 * `isValid: boolean | null`
 * `isInvalid: boolean | null`
+* `isUploading: boolean`
 * `onClick: () => void`
 * `onDelete: (targetIndex: number) => void`
 * `onBlur: (e: React.SyntheticEvent) => void`

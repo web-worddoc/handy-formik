@@ -19,9 +19,10 @@ type OutputProps = {
     value: any;
     files: CustomFile[];
     touched: boolean;
-    error: string | null,
-    isValid: boolean | null,
-    isInvalid: boolean | null,
+    error: string | null;
+    isValid: boolean | null;
+    isInvalid: boolean | null;
+    isUploading: boolean;
 
     onClick: () => void;
     onDelete: (targetIndex: number) => void;
@@ -43,6 +44,7 @@ export const FormikFile = ({ render, name, maxFiles, multiple, maxSize, accept, 
 
     const myRef: React.RefObject<any> | null = React.useRef(null);
     const [ filesState, setFilesState ]: any = React.useState([]);
+    const [ isUploading, setUploading ]: any = React.useState(false);
     const {
         values,
         errors,
@@ -52,11 +54,12 @@ export const FormikFile = ({ render, name, maxFiles, multiple, maxSize, accept, 
     }: any = useFormikContext();
 
     const handleUpload = React.useCallback((dropped: File[]) => {
+        setUploading(true);
         const newAmount = dropped.length;
         const currentAmount = filesState.length;
         let acceptedFiles = dropped;
         let formattedAcceptedFiles: CustomFile[] = [];
-        
+
         if (multiple && maxFiles && currentAmount + newAmount > maxFiles) {
             acceptedFiles = acceptedFiles.slice(
                 0, -1 * (currentAmount + newAmount - maxFiles)
@@ -85,6 +88,7 @@ export const FormikFile = ({ render, name, maxFiles, multiple, maxSize, accept, 
 
         let interval = setInterval(() => {
             if (acceptedFiles.length === formattedAcceptedFiles.length) {
+                setUploading(false);
                 setFilesState(multiple ? [...filesState, ...formattedAcceptedFiles] : formattedAcceptedFiles.slice(0, 1));
                 if (multiple) {
                     const currentValues = Array.isArray(values[name]) ? values[name] : [];
@@ -148,6 +152,7 @@ export const FormikFile = ({ render, name, maxFiles, multiple, maxSize, accept, 
                                 touched: !!touched[name],
                                 isValid,
                                 isInvalid,
+                                isUploading,
                                 onClick: handleClick,
                                 onDelete: handleDelete,
                             })
