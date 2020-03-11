@@ -31,8 +31,7 @@ type OutputProps = {
 type CustomFile = {
     name: string;
     size: number;
-    preview: string;
-    src: File | string;
+    origin: File | string;
 }
 
 type Format = 'base64';
@@ -66,7 +65,7 @@ export const FormikFile = ({ render, name, maxFiles, multiple, maxSize, accept, 
         acceptedFiles.forEach((file: File) => {
             const reader: any = new FileReader();
             reader.onload = (e: { target: { result: string } }) => {
-                const src = (() => {
+                const origin = (() => {
                     if (format === 'base64')
                         return e.target.result;
                     else
@@ -76,8 +75,7 @@ export const FormikFile = ({ render, name, maxFiles, multiple, maxSize, accept, 
                 formattedAcceptedFiles = [...formattedAcceptedFiles, ...[{
                     name: file.name,
                     size: file.size,
-                    preview: e.target.result,
-                    src
+                    origin
                 }]]
             };
             reader.readAsDataURL(file);
@@ -88,9 +86,9 @@ export const FormikFile = ({ render, name, maxFiles, multiple, maxSize, accept, 
                 setFilesState(multiple ? [...filesState, ...formattedAcceptedFiles] : formattedAcceptedFiles.slice(0, 1));
                 if (multiple) {
                     const currentValues = Array.isArray(values[name]) ? values[name] : [];
-                    setFieldValue(name, [...currentValues, ...formattedAcceptedFiles.map(item => item.src)]);
+                    setFieldValue(name, [...currentValues, ...formattedAcceptedFiles.map(item => item.origin)]);
                 } else {
-                    setFieldValue(name, formattedAcceptedFiles[0].src);
+                    setFieldValue(name, formattedAcceptedFiles[0].origin);
                 }
                 clearInterval(interval);
             }
@@ -111,13 +109,13 @@ export const FormikFile = ({ render, name, maxFiles, multiple, maxSize, accept, 
         }
     }, [filesState, name]);
 
-    const handleClick = React.useCallback(() => {
+    const handleClick = React.useCallback((e) => {
         if (myRef.current) {
             myRef.current.open();
         }
     }, []);
 
-    const isValid = touched[name] ? !errors[name] && (Array.isArray(values[name]) ? !!values[name].length : !!values[name]) : null;
+    const isValid = touched[name] ? !errors[name] && (Array.isArray(values[name] ? !!values[name].length : !!values[name])) : null;
     const isInvalid = touched[name] ? !!errors[name] : null;
     const error = touched[name] ? errors[name] || null : null;
 
@@ -129,7 +127,6 @@ export const FormikFile = ({ render, name, maxFiles, multiple, maxSize, accept, 
             accept={accept}
             multiple={multiple}
             maxSize={maxSize}
-            minSize={1}
             onDropAccepted={handleUpload}
             {...rest}
         >

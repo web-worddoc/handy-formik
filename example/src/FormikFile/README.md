@@ -30,8 +30,7 @@ FormikFile helps to connect a file uploader to Formik state.
 `CustomFile`
 * `name: string`
 * `size: number`
-* `preview: string`
-* `src: File | string`
+* `origin: File | string`
 
 `Format: 'base64'`
 

@@ -10,10 +10,10 @@ import {
     FormikRadio,
     FormikSelect,
     FormikState,
-    FormikFile,
+    // FormikFile,
 } from 'handy-formik';
-import { useFormikContext } from 'formik';
 import { Formik } from './Formik';
+import { FormikFile } from './FormikFile';
 
 
 declare module 'yup' {
@@ -88,7 +88,7 @@ export default class App extends Component {
                                     return (
                                         <div>
                                             <button {...props}>FILE</button>
-                                            {props.filesState.map((el: any, i: any) => (
+                                            {props.files.map((el: any, i: any) => (
                                                 <div key={i} onClick={props.onDelete.bind(null, i)}>{el.size}</div>
                                             ))}
                                         </div>
