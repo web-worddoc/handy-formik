@@ -12,8 +12,8 @@ FormikSelect helps to connect a native or custom select to Formik state.
 
 * `name: string`
 * `value: any`
-* `error: any | null`
 * `touched: boolean`
+* `error: any | null`
 * `isValid: boolean | null`
 * `isInvalid: boolean | null`
 * `selectedOption: Option | null`

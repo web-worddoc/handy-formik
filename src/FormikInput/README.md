@@ -11,8 +11,8 @@ FormikInput helps to connect text `<input/>` to Formik state.
 
 * `name: string`
 * `value: any`
-* `error: any | null`
 * `touched: boolean`
+* `error: any | null`
 * `isValid: boolean | null`
 * `isInvalid: boolean | null`
 * `onBlur: (e: React.SyntheticEvent) => void`
