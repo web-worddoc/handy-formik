@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { Formik as FormikElement } from 'formik';
 
-import { shouldUpdate } from './../utils';
-
 
 type Props = {
     initialValues: Values;
@@ -20,7 +18,7 @@ type Values = {
     [key: string]: any
 }
 
-export const Formik = React.memo(({ initialValues, onSubmit, render, ...rest }: Props) => {
+export const Formik = ({ initialValues, onSubmit, render, ...rest }: Props) => {
     if (!render) throw new Error(`Formik: prop 'render' doesn't exist!`);
     if (!initialValues) throw new Error(`Formik: prop 'initialValues' doesn't exist!`);
     if (!onSubmit) throw new Error(`Formik: prop 'onSubmit' doesn't exist!`);
@@ -41,4 +39,4 @@ export const Formik = React.memo(({ initialValues, onSubmit, render, ...rest }: 
             )}
         </FormikElement>
     )
-}, shouldUpdate)
+}

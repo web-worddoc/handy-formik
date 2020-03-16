@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { useFormikContext } from 'formik';
 
-import { shouldUpdate } from './../utils';
-
 
 type Props = {
     name: string;
@@ -22,7 +20,7 @@ type OutputProps = {
     onChange: (e: React.SyntheticEvent) => void;
 };
 
-export const FormikInput = React.memo(({
+export const FormikInput = ({
     name,
     render,
 }: Props) => {
@@ -59,4 +57,4 @@ export const FormikInput = React.memo(({
             }
         </>
     )
-}, shouldUpdate)
+}

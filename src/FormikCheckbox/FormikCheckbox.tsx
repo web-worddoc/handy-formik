@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { useFormikContext } from 'formik';
 
-import { shouldUpdate } from './../utils';
-
 
 type Props = {
     name: string;
@@ -22,7 +20,7 @@ type OutputProps = {
     onChange: (e: React.SyntheticEvent) => void;
 };
 
-export const FormikCheckbox = React.memo(({ name, render }: Props) => {
+export const FormikCheckbox = ({ name, render }: Props) => {
     if (!name) throw new Error(`FormikCheckbox: prop 'name' doesn't exist!`);
     if (!render) throw new Error(`FormikCheckbox: prop 'render' doesn't exist!`);
 
@@ -64,4 +62,4 @@ export const FormikCheckbox = React.memo(({ name, render }: Props) => {
             }
         </>
     );
-}, shouldUpdate)
+}

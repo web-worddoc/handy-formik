@@ -2,8 +2,6 @@ import * as React from 'react';
 import { useFormikContext } from 'formik';
 import Dropzone from 'react-dropzone';
 
-import { shouldUpdate } from './../utils';
-
 
 type Props = {
     name: string;
@@ -40,7 +38,7 @@ type CustomFile = {
 
 type Format = 'base64';
 
-export const FormikFile = React.memo(({ render, name, maxFiles, multiple, maxSize, accept, format, ...rest }: Props) => {
+export const FormikFile = ({ render, name, maxFiles, multiple, maxSize, accept, format, ...rest }: Props) => {
     if (!name) throw new Error(`FormikFile: prop 'name' doesn't exist!`);
     if (!render) throw new Error(`FormikFile: prop 'render' doesn't exist!`);
 
@@ -164,4 +162,4 @@ export const FormikFile = React.memo(({ render, name, maxFiles, multiple, maxSiz
             }}
         </Dropzone>
     )
-}, shouldUpdate)
+}
