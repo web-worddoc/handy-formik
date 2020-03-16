@@ -32,6 +32,7 @@ describe('FormikForm', () => {
     });
 
     it('descends expected props', () => {
+        expect(props.names).toEqual({ testName: 'testName' });
         expect(props.initialValues).toEqual({ testName: 'test value' });
         expect(props.errors).toEqual({});
         expect(props.touched).toEqual({});

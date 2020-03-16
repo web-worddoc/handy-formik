@@ -13,13 +13,8 @@ type Props = {
 }
 
 type OutputProps = {
-    names: Names;
     [key: string]: any;
 };
-
-type Names = {
-    [key: string]: string
-}
 
 type Values = {
     [key: string]: any
@@ -29,14 +24,6 @@ export const Formik = React.memo(({ initialValues, onSubmit, render, ...rest }: 
     if (!render) throw new Error(`Formik: prop 'render' doesn't exist!`);
     if (!initialValues) throw new Error(`Formik: prop 'initialValues' doesn't exist!`);
     if (!onSubmit) throw new Error(`Formik: prop 'onSubmit' doesn't exist!`);
-
-    const names: Names = React.useMemo(() => {
-        const res = {};
-        for (let el in initialValues) {
-            res[el] = el;
-        }
-        return res;
-    }, [initialValues]);
 
     return (
         <FormikElement
@@ -49,10 +36,7 @@ export const Formik = React.memo(({ initialValues, onSubmit, render, ...rest }: 
         >
             {(formikProps) => (
                 <>
-                    {render({
-                        ...formikProps,
-                        ...{ names },
-                    })}
+                    {render(formikProps)}
                 </>
             )}
         </FormikElement>

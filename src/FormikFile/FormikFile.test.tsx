@@ -33,8 +33,8 @@ const getComponent = (props?: any, connectorProps?: any) => {
             }}
             onSubmit={jest.fn()}
             validationSchema={schema}
-            render={({ names }) => (
-                <FormikForm render={() => (
+            render={() => (
+                <FormikForm render={({ names }) => (
                     <FormikFile name={names.files} {...connectorProps ? connectorProps : {}} render={props => (
                         <MockComponent {...props} />
                     )}/>
