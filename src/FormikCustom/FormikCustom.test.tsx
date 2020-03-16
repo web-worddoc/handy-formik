@@ -30,8 +30,8 @@ const getComponent = (props?: any) => {
             }}
             onSubmit={jest.fn()}
             validationSchema={schema}
-            render={({ names }) => (
-                <FormikForm render={() => (
+            render={() => (
+                <FormikForm render={({ names }) => (
                     <FormikCustom name={names.data} render={props => (
                         <MockComponent {...props}/>
                     )}/>

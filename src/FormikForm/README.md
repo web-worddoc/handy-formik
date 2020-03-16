@@ -8,7 +8,7 @@ FormikForm is a small wrapper around an HTML `<form>` element that automatically
 
 ## OutputProps
 
-* `FormikProps<FormikBag>`
+* `FormikProps<FormikBag, Names>`
 
 ## Usage
 

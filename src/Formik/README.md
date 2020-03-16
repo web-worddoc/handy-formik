@@ -20,7 +20,7 @@ This is an entry point for a single form. It holds a state of underlying form an
 
 ## OutputProps
 
-* `FormikProps<FormikBag, Names>`
+* `FormikProps<FormikBag>`
 
 ## Usage
 
