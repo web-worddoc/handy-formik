@@ -1,8 +1,6 @@
 import * as React from 'react';
 import { useFormikContext } from 'formik';
 
-import { shouldUpdate } from './../utils';
-
 
 type Props = {
     name: string;
@@ -30,7 +28,7 @@ type Option = {
     value: any;
 }
 
-export const FormikSelect = React.memo(({ name, render, options }: Props) => {
+export const FormikSelect = ({ name, render, options }: Props) => {
     if (!name) throw new Error(`FormikSelect: prop 'name' doesn't exist!`);
     if (!render) throw new Error(`FormikSelect: prop 'render' doesn't exist!`);
     if (!options || !Array.isArray(options)) throw new Error(`FormikSelect: prop 'options' doesn't exist or not an array!`);
@@ -75,4 +73,4 @@ export const FormikSelect = React.memo(({ name, render, options }: Props) => {
             }
         </>
     )
-}, shouldUpdate)
+}
