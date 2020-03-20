@@ -92,11 +92,16 @@ describe('FormikFile', () => {
             multiple: true,
         });
     
-        await selectFiles(component, [FILE, FILE, FILE]);
+        await selectFiles(component, [FILE]);
     
         component.update();
-        expect(component.find(MockComponent).prop('value').length).toBe(3);
-        expect(component.find(MockComponent).prop('files').length).toBe(3);
+        expect(component.find(MockComponent).prop('value').length).toBe(1);
+        expect(component.find(MockComponent).prop('files').length).toBe(1);
+
+        await selectFiles(component, [FILE]);
+        component.update();
+        expect(component.find(MockComponent).prop('value').length).toBe(2);
+        expect(component.find(MockComponent).prop('files').length).toBe(2);
     })
 
     it('doesn\'t accept more than maxFiles', async () => {
@@ -105,7 +110,13 @@ describe('FormikFile', () => {
             maxFiles: 2
         });
 
-        await selectFiles(component, [FILE, FILE, FILE]);
+        await selectFiles(component, [FILE, FILE]);
+
+        component.update();
+        expect(component.find(MockComponent).prop('value').length).toBe(2);
+        expect(component.find(MockComponent).prop('files').length).toBe(2);
+
+        await selectFiles(component, [FILE]);
 
         component.update();
         expect(component.find(MockComponent).prop('value').length).toBe(2);
