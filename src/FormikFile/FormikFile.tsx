@@ -43,7 +43,7 @@ export const FormikFile = ({ render, name, maxFiles, multiple, maxSize, accept, 
     if (!render) throw new Error(`FormikFile: prop 'render' doesn't exist!`);
 
     const myRef: React.RefObject<any> | null = React.useRef(null);
-    const [ filesState, setFilesState ]: any = React.useState([]);
+    const [ filesState, setFilesState ]: any = React.useState <CustomFile[] | string | null>([]);
     const [ isUploading, setUploading ]: any = React.useState(false);
     const {
         values,
@@ -53,7 +53,16 @@ export const FormikFile = ({ render, name, maxFiles, multiple, maxSize, accept, 
         getFieldProps
     }: any = useFormikContext();
 
-    const handleUpload = React.useCallback((dropped: File[]) => {
+    // Sync state and form value
+    React.useEffect(() => {
+        setTimeout(() => {
+            if (Array.isArray(values[name]) && values[name].length !== filesState.length) {
+                setFilesState(values[name].filter((file: string | File, i: number) => file !== filesState[i].src));
+            }
+        }, 0);
+    }, [values])
+
+    const handleUpload = (dropped: File[]) => {
         setUploading(true);
         const newAmount = dropped.length;
         const currentAmount = filesState.length;
@@ -99,9 +108,9 @@ export const FormikFile = ({ render, name, maxFiles, multiple, maxSize, accept, 
                 clearInterval(interval);
             }
         }, 100);
-    }, []);
+    };
 
-    const handleDelete = React.useCallback((targetIndex: number) => {
+    const handleDelete = (targetIndex: number) => {
         let newFilesState = filesState;
         newFilesState.splice(targetIndex, 1);
         setFilesState(newFilesState);
@@ -113,13 +122,13 @@ export const FormikFile = ({ render, name, maxFiles, multiple, maxSize, accept, 
         } else {
             setFieldValue(name, null);
         }
-    }, [filesState, name]);
+    };
 
-    const handleClick = React.useCallback(() => {
+    const handleClick = () => {
         if (myRef.current) {
             myRef.current.open();
         }
-    }, []);
+    };
 
     const isValid = touched[name] ? !errors[name] && (Array.isArray(values[name]) ? !!values[name].length : !!values[name]) : null;
     const isInvalid = touched[name] ? !!errors[name] : null;
