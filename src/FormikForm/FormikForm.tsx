@@ -4,6 +4,7 @@ import { Form, useFormikContext } from 'formik';
 
 type Props = {
     render: (formikProps: OutputProps) => React.ReactNode;
+    [key: string]: any;
 }
 
 type OutputProps = {
