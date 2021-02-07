@@ -21,11 +21,9 @@ const schema = Yup.object().shape({
 })
 const FILE = new File(['TEST'], 'test.txt', { type: 'text/plain' });
 const FILE_AS_BASE64 = 'data:text/plain;charset=undefined,TEST';
-const MockComponent = (props: any) => (
-    <></>
-)
+const MockComponent = (props: any) => <></>;
 
-const getComponent = (props?: any, connectorProps?: any) => {
+const getWrapperComponent = (props?: any, connectorProps?: any) => {
     return mount(
         <Formik
             initialValues={{
@@ -52,162 +50,175 @@ const selectFiles = async (component: any, files: any) => {
     });
 }
 
-describe('FormikFile', () => {
-    it('renders correctly', () => {
-        const component = getComponent();
+let wrapperComponent;
+let mockComponent;
 
-        expect(component.find(MockComponent).exists()).toBe(true);
+function updateWrapperComponent() {
+    wrapperComponent.update();
+    mockComponent = wrapperComponent.find(MockComponent);
+}
+
+describe('FormikFile', () => {
+    beforeEach(() => {
+        wrapperComponent = getWrapperComponent();
+        mockComponent = wrapperComponent.find(MockComponent);
+    })
+
+    it('renders correctly', () => {
+        expect(mockComponent.exists()).toBe(true);
     })
 
     it('descends expected props', () => {
-        const component = getComponent();
-
-        expect(component.find(MockComponent).prop('name')).not.toBe(undefined);
-        expect(component.find(MockComponent).prop('value')).not.toBe(undefined);
-        expect(component.find(MockComponent).prop('files')).not.toBe(undefined);
-        expect(component.find(MockComponent).prop('touched')).not.toBe(undefined);
-        expect(component.find(MockComponent).prop('error')).not.toBe(undefined);
-        expect(component.find(MockComponent).prop('isValid')).not.toBe(undefined);
-        expect(component.find(MockComponent).prop('isInvalid')).not.toBe(undefined);
-        expect(component.find(MockComponent).prop('onClick')).not.toBe(undefined);
-        expect(component.find(MockComponent).prop('onDelete')).not.toBe(undefined);
-        expect(component.find(MockComponent).prop('onBlur')).not.toBe(undefined);
+        expect(mockComponent.prop('name')).toBe('files');
+        expect(Array.isArray(mockComponent.prop('value'))).toBe(true);
+        expect(mockComponent.prop('value').length).toBe(0);
+        expect(Array.isArray(mockComponent.prop('files'))).toBe(true);
+        expect(mockComponent.prop('files').length).toBe(0);
+        expect(mockComponent.prop('touched')).toBe(false);
+        expect(mockComponent.prop('error')).toBe(null);
+        expect(mockComponent.prop('isValid')).toBe(null);
+        expect(mockComponent.prop('isInvalid')).toBe(null);
+        expect(mockComponent.prop('onClick')).toBeInstanceOf(Function);
+        expect(mockComponent.prop('onDelete')).toBeInstanceOf(Function);
+        expect(mockComponent.prop('onBlur')).toBeInstanceOf(Function);
     });
 
     it('accepts 1 file if multiple not desired', async () => {
-        const component = getComponent();
+        await selectFiles(wrapperComponent, [FILE, FILE, FILE]);
     
-        await selectFiles(component, [FILE, FILE, FILE]);
-    
-        component.update();
-        expect(component.find(MockComponent).prop('value')).toBeInstanceOf(File);
-        expect(component.find(MockComponent).prop('files').length).toBe(1);
-        expect(component.find(MockComponent).prop('files')[0].size).not.toBe(undefined);
-        expect(component.find(MockComponent).prop('files')[0].name).not.toBe(undefined);
-        expect(component.find(MockComponent).prop('files')[0].src).not.toBe(undefined);
+        updateWrapperComponent();
+        expect(mockComponent.prop('value')).toBeInstanceOf(File);
+        expect(mockComponent.prop('files').length).toBe(1);
+        expect(mockComponent.prop('files')[0].size).not.toBe(undefined);
+        expect(mockComponent.prop('files')[0].name).not.toBe(undefined);
+        expect(mockComponent.prop('files')[0].src).not.toBe(undefined);
     })
 
     it('accepts multiple files if desired', async () => {
-        const component = getComponent(null, {
+        wrapperComponent = getWrapperComponent(null, {
             multiple: true,
         });
+        mockComponent = wrapperComponent.find(MockComponent);
     
-        await selectFiles(component, [FILE]);
+        await selectFiles(wrapperComponent, [FILE]);
     
-        component.update();
-        expect(component.find(MockComponent).prop('value').length).toBe(1);
-        expect(component.find(MockComponent).prop('files').length).toBe(1);
+        updateWrapperComponent();
+        expect(mockComponent.prop('value').length).toBe(1);
+        expect(mockComponent.prop('files').length).toBe(1);
 
-        await selectFiles(component, [FILE]);
-        component.update();
-        expect(component.find(MockComponent).prop('value').length).toBe(2);
-        expect(component.find(MockComponent).prop('files').length).toBe(2);
+        await selectFiles(wrapperComponent, [FILE]);
+        updateWrapperComponent();
+        expect(mockComponent.prop('value').length).toBe(2);
+        expect(mockComponent.prop('files').length).toBe(2);
     })
 
     it('doesn\'t accept more than maxFiles', async () => {
-        const component = getComponent(null, {
+        wrapperComponent = getWrapperComponent(null, {
             multiple: true,
             maxFiles: 2
         });
+        mockComponent = wrapperComponent.find(MockComponent);
 
-        await selectFiles(component, [FILE, FILE]);
+        await selectFiles(wrapperComponent, [FILE, FILE]);
 
-        component.update();
-        expect(component.find(MockComponent).prop('value').length).toBe(2);
-        expect(component.find(MockComponent).prop('files').length).toBe(2);
+        updateWrapperComponent();
+        expect(mockComponent.prop('value').length).toBe(2);
+        expect(mockComponent.prop('files').length).toBe(2);
 
-        await selectFiles(component, [FILE]);
+        await selectFiles(wrapperComponent, [FILE]);
 
-        component.update();
-        expect(component.find(MockComponent).prop('value').length).toBe(2);
-        expect(component.find(MockComponent).prop('files').length).toBe(2);
+        updateWrapperComponent();
+        expect(mockComponent.prop('value').length).toBe(2);
+        expect(mockComponent.prop('files').length).toBe(2);
     })
 
     it('upload single file as File', async () => {
-        const component = getComponent();
+        await selectFiles(wrapperComponent, [FILE, FILE, FILE]);
 
-        await selectFiles(component, [FILE, FILE, FILE]);
-
-        component.update();
-        expect(component.find(MockComponent).prop('value')).toBeInstanceOf(File);
-        expect(component.find(MockComponent).prop('files').length).toBe(1);
-        expect(component.find(MockComponent).prop('files')[0].name).toBe('test.txt');
-        expect(component.find(MockComponent).prop('files')[0].size).toBe(4);
-        expect(component.find(MockComponent).prop('files')[0].src).toBeInstanceOf(File);
+        updateWrapperComponent();
+        expect(mockComponent.prop('value')).toBeInstanceOf(File);
+        expect(mockComponent.prop('files').length).toBe(1);
+        expect(mockComponent.prop('files')[0].name).toBe('test.txt');
+        expect(mockComponent.prop('files')[0].size).toBe(4);
+        expect(mockComponent.prop('files')[0].src).toBeInstanceOf(File);
     })
 
     it('upload multiple files as File', async () => {
-        const component = getComponent(null, {
+        wrapperComponent = getWrapperComponent(null, {
             multiple: true
         });
+        mockComponent = wrapperComponent.find(MockComponent);
 
-        await selectFiles(component, [FILE, FILE, FILE]);
+        await selectFiles(wrapperComponent, [FILE, FILE, FILE]);
 
-        component.update();
-        expect(component.find(MockComponent).prop('value').length).toBe(3);
-        expect(component.find(MockComponent).prop('value')[0]).toBeInstanceOf(File);
-        expect(component.find(MockComponent).prop('files').length).toBe(3);
-        expect(component.find(MockComponent).prop('files')[0].name).toBe('test.txt');
-        expect(component.find(MockComponent).prop('files')[0].size).toBe(4);
-        expect(component.find(MockComponent).prop('files')[0].src).toBeInstanceOf(File);
+        updateWrapperComponent();
+        expect(mockComponent.prop('value').length).toBe(3);
+        expect(mockComponent.prop('value')[0]).toBeInstanceOf(File);
+        expect(mockComponent.prop('files').length).toBe(3);
+        expect(mockComponent.prop('files')[0].name).toBe('test.txt');
+        expect(mockComponent.prop('files')[0].size).toBe(4);
+        expect(mockComponent.prop('files')[0].src).toBeInstanceOf(File);
     })
 
     it('upload single file as Base64', async () => {
-        const component = getComponent(null, {
+        wrapperComponent = getWrapperComponent(null, {
             format: 'base64'
         });
+        mockComponent = wrapperComponent.find(MockComponent);
 
-        await selectFiles(component, [FILE, FILE, FILE]);
+        await selectFiles(wrapperComponent, [FILE, FILE, FILE]);
 
-        component.update();
-        expect(component.find(MockComponent).prop('value')).toBe(FILE_AS_BASE64);
-        expect(component.find(MockComponent).prop('files').length).toBe(1);
-        expect(component.find(MockComponent).prop('files')[0].name).toBe('test.txt');
-        expect(component.find(MockComponent).prop('files')[0].size).toBe(4);
-        expect(component.find(MockComponent).prop('files')[0].src).toBe(FILE_AS_BASE64);
+        updateWrapperComponent();
+        expect(mockComponent.prop('value')).toBe(FILE_AS_BASE64);
+        expect(mockComponent.prop('files').length).toBe(1);
+        expect(mockComponent.prop('files')[0].name).toBe('test.txt');
+        expect(mockComponent.prop('files')[0].size).toBe(4);
+        expect(mockComponent.prop('files')[0].src).toBe(FILE_AS_BASE64);
     })
 
     it('upload multiple files as Base64', async () => {
-        const component = getComponent(null, {
+        wrapperComponent = getWrapperComponent(null, {
             multiple: true,
             format: 'base64'
         });
+        mockComponent = wrapperComponent.find(MockComponent);
 
-        await selectFiles(component, [FILE, FILE, FILE]);
+        await selectFiles(wrapperComponent, [FILE, FILE, FILE]);
 
-        component.update();
-        expect(component.find(MockComponent).prop('value').length).toBe(3);
-        expect(component.find(MockComponent).prop('value')[0]).toBe(FILE_AS_BASE64);
-        expect(component.find(MockComponent).prop('files').length).toBe(3);
-        expect(component.find(MockComponent).prop('files')[0].name).toBe('test.txt');
-        expect(component.find(MockComponent).prop('files')[0].size).toBe(4);
-        expect(component.find(MockComponent).prop('files')[0].src).toBe(FILE_AS_BASE64);
+        updateWrapperComponent();
+        expect(mockComponent.prop('value').length).toBe(3);
+        expect(mockComponent.prop('value')[0]).toBe(FILE_AS_BASE64);
+        expect(mockComponent.prop('files').length).toBe(3);
+        expect(mockComponent.prop('files')[0].name).toBe('test.txt');
+        expect(mockComponent.prop('files')[0].size).toBe(4);
+        expect(mockComponent.prop('files')[0].src).toBe(FILE_AS_BASE64);
     })
 
     it('validates correctly', async () => {
-        const component = getComponent(null, {
+        wrapperComponent = getWrapperComponent(null, {
             multiple: true
         });
+        mockComponent = wrapperComponent.find(MockComponent);
 
-        expect(component.find(MockComponent).prop('error')).toBe(null); // no error if not touched and no value
-        expect(component.find(MockComponent).prop('isValid')).toBe(null); // no isValid status if not touched and no value
-        expect(component.find(MockComponent).prop('isInvalid')).toBe(null); // no isInvalid status if not touched and no value
+        expect(mockComponent.prop('error')).toBe(null); // no error if not touched and no value
+        expect(mockComponent.prop('isValid')).toBe(null); // no isValid status if not touched and no value
+        expect(mockComponent.prop('isInvalid')).toBe(null); // no isInvalid status if not touched and no value
         
         await act(async () => {
-            component.find('form').simulate('submit');
+            wrapperComponent.find('form').simulate('submit');
         });
         
-        component.update();
-        expect(component.find(MockComponent).prop('error')).toBe(ERROR_NEED_MORE_FILES); // has error if touched and no value
-        expect(component.find(MockComponent).prop('isValid')).toBe(false); // no isValid status if touched and no value
-        expect(component.find(MockComponent).prop('isInvalid')).toBe(true); // is invalid if touched and no value
+        updateWrapperComponent();
+        expect(mockComponent.prop('error')).toBe(ERROR_NEED_MORE_FILES); // has error if touched and no value
+        expect(mockComponent.prop('isValid')).toBe(false); // no isValid status if touched and no value
+        expect(mockComponent.prop('isInvalid')).toBe(true); // is invalid if touched and no value
         
-        await selectFiles(component, [FILE, FILE, FILE]);
+        await selectFiles(wrapperComponent, [FILE, FILE, FILE]);
         
-        component.update();
-        expect(component.find(MockComponent).prop('error')).toBe(null); // no error if touched and has value
-        expect(component.find(MockComponent).prop('isValid')).toBe(true); // is valid if is not touched and has value
-        expect(component.find(MockComponent).prop('isInvalid')).toBe(false); // not invalid if is not touched and has value
+        updateWrapperComponent();
+        expect(mockComponent.prop('error')).toBe(null); // no error if touched and has value
+        expect(mockComponent.prop('isValid')).toBe(true); // is valid if is not touched and has value
+        expect(mockComponent.prop('isInvalid')).toBe(false); // not invalid if is not touched and has value
     });
 
 })

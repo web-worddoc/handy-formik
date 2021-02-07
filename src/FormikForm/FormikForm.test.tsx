@@ -7,12 +7,10 @@ import { Formik, FormikForm } from './../';
 
 configure({ adapter: new Adapter() });
 
-const MockComponent = () => (
-    <></>
-)
+const MockComponent = () => <></>;
 
 describe('FormikForm', () => {
-    const component = mount(
+    const wrapperComponent = mount(
         <Formik
             initialValues={{
                 testName: 'test value'
@@ -25,10 +23,11 @@ describe('FormikForm', () => {
             )}
         />
     )
-    const props: any = component.find(MockComponent).props();
+    const mockComponent = wrapperComponent.find(MockComponent);
+    const props: any = mockComponent.props();
 
     it('renders correctly', () => {
-        expect(component.find(MockComponent).exists()).toBe(true);
+        expect(mockComponent.exists()).toBe(true);
     });
 
     it('descends expected props', () => {
